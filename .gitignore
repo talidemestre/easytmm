@@ -1,2 +1,3 @@
 venv
 *matrix_output/
+__pycache__

@@ -1,6 +1,12 @@
 from argparse import ArgumentParser, Namespace
 import pathlib
 import os
+from models import *
+
+model_map = {
+    "mom5" : mom5,
+    "stub" : stub
+}
 
 def setup():
     parser = ArgumentParser(description='Generate transport matrices.')
@@ -9,7 +15,7 @@ def setup():
     parser.add_argument('-o', '--output', metavar='/path/to/matrix/output', 
                     help='path to output matrices', default="./matrix_output", type=pathlib.Path)
     parser.add_argument('-m', '--model', metavar='"Model Type"', 
-                    help='input model type', default="MOM5")
+                    help='input model type', default="mom5")
     return parser.parse_args()
 
 def main(args: Namespace):
@@ -20,6 +26,12 @@ def main(args: Namespace):
     tempdir = (args.output / ".temp")
     tempdir.mkdir(parents=False, exist_ok=False)
     os.system('ln -s ' + str(args.source) + '/* ' +str(tempdir))
+
+    # call model preprocess script
+    try:
+        model_map[args.model].preprocess(args)
+    except KeyError:
+        raise NotImplementedError("No such model as {}!".format(args.model))
 
 def teardown(args: Namespace):
     os.system('rm -rf ' + str(args.output))
