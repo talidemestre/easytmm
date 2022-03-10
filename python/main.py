@@ -18,7 +18,7 @@ def setup():
                     help='input model type', default="mom5")
     return parser.parse_args()
 
-def main(args: Namespace):
+def main(args: Namespace):  
     # check for output directory, fail if already exists
     args.output.mkdir(parents=False, exist_ok=False)
 
