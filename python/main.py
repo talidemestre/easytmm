@@ -11,7 +11,9 @@ model_map = {
 def setup():
     parser = ArgumentParser(description='Generate transport matrices.')
     parser.add_argument('-s', '--source', metavar='/path/to/model/run', 
-                        help='path to model run', required=True, type=pathlib.Path)
+                        help='path to original model run outputs', required=True, type=pathlib.Path)
+    parser.add_argument('-i', '--source_inputs', metavar='/path/to/original/input',
+                        help='parth to original model run inputs', required=False, type=pathlib.Path)
     parser.add_argument('-o', '--output', metavar='/path/to/matrix/output', 
                     help='path to output matrices', default="./matrix_output", type=pathlib.Path)
     parser.add_argument('-m', '--model', metavar='"Model Type"', 
