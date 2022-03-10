@@ -29,7 +29,7 @@ def main(args: Namespace):
 
     # call model preprocess script
     try:
-        model_map[args.model].preprocess(args)
+        model_map[args.model].preprocess(args, tempdir)
     except KeyError:
         raise NotImplementedError("No such model as {}!".format(args.model))
 
