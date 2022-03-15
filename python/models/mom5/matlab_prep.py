@@ -10,7 +10,9 @@ def matlab_prep(tempdir: Path):
     matlab_working_dir = Path(os.getcwd())
     matlab_output_dir = tempdir / "matlab_data"
     matlab_output_dir.mkdir(exist_ok=True)
+    
     octave.eval('pkg load netcdf')
+    octave.eval("warning('off', 'Octave:possible-matlab-short-circuit-operator');")
 
     clear_previous(matlab_working_dir, matlab_output_dir)
     prep_files(tempdir)
