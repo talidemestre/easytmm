@@ -1,0 +1,10 @@
+/local/spool/pbs/mom_priv/jobs/36708166.gadi-pbs.SC: line 5: venv/bin/activate: No such file or directory
+/scratch/v45/tm8938/projects/easytmm/python/main.py: line 1: from: command not found
+import: unable to open X server `' @ error/import.c/ImportImageCommand/344.
+import: unable to open X server `' @ error/import.c/ImportImageCommand/344.
+/scratch/v45/tm8938/projects/easytmm/python/main.py: line 4: from: command not found
+/scratch/v45/tm8938/projects/easytmm/python/main.py: line 6: model_map: command not found
+/scratch/v45/tm8938/projects/easytmm/python/main.py: line 7: mom5: command not found
+/scratch/v45/tm8938/projects/easytmm/python/main.py: line 8: stub: command not found
+/scratch/v45/tm8938/projects/easytmm/python/main.py: line 9: syntax error near unexpected token `}'
+/scratch/v45/tm8938/projects/easytmm/python/main.py: line 9: `}'
