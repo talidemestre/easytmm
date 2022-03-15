@@ -3,7 +3,6 @@ from pathlib import Path
 import netCDF4 as nc
 import numpy as np
 
-
 ## Modified from code written by David K. Hutchinson
 ## TODO: Ask Dave for Comments
 def check_levels(tempdir: Path):

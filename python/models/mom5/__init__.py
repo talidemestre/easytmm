@@ -3,6 +3,7 @@ from pathlib import Path
 
 from .check_levels import check_levels
 from .make_vert import make_vert
+from .matlab_prep import matlab_prep
 
 def preprocess(args: Namespace, tempdir: Path): 
     try:
@@ -15,3 +16,4 @@ def preprocess(args: Namespace, tempdir: Path):
     (tempdir / 'topog.nc').symlink_to(args.source_inputs / 'topog.nc')
     check_levels(tempdir)
     make_vert(tempdir)
+    matlab_prep(tempdir)
