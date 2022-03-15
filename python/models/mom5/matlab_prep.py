@@ -4,27 +4,39 @@ from oct2py import octave
 import os
 import shutil
 
+out_files = ['basis_functions', 'boxes', 'boxnum', 'links', 'matrix_extraction_run_data', 'tracer_tiles']
+
 def matlab_prep(tempdir: Path):
-
-    # clean up previous runs
-    matlab_working_dir = Path(os.getcwd() + '/python/models/mom5/matlab_scripts')
-
-    matlab_output_dir = matlab_working_dir / "Data"
+    matlab_working_dir = Path(os.getcwd())
+    matlab_output_dir = tempdir / "matlab_data"
     matlab_output_dir.mkdir(exist_ok=True)
 
-    out_files = ['basis_functions.mat', 'boxes.mat', 'boxnum.mat', 'links.mat', 'matrix_extraction_run_data.mat', 'tracer_tiles.mat']
+    # clear_previous(matlab_working_dir, matlab_output_dir)
+    # prep_files(tempdir)
+    # clear_current(matlab_working_dir, matlab_output_dir)
+    makeIni(matlab_working_dir, matlab_output_dir)
+
+def clear_previous(workdir: Path, outdir: Path):
     for out_file in out_files:
-        matlab_working_dir.unlink(out_file, missing_ok=True)
-        matlab_output_dir.unlink(out_file, missing_ok=True)
+        (workdir / out_file).unlink(missing_ok=True)
+        (outdir / out_file).unlink( missing_ok=True)
 
-
+def prep_files(tempdir: Path):
     # run prep_files script
     octave.addpath(os.getcwd() + '/python/models/mom5/matlab_scripts')
-    octave.addpath(os.getcwd() + '/python/models/mom5/matlab_scripts/Matrix_extraction_code') 
-    octave.run('prep_files(7200)') #TODO pass in deltaT
+    octave.addpath(os.getcwd() + '/python/models/mom5/matlab_scripts/Matrix_extraction_code')
+    octave.eval('pkg load netcdf')
+    octave.feval('prep_files', '7200', str(outdir)) #TODO pass in deltaT
 
+def clear_current(workdir: Path, outdir: Path):
     # clean up matlab
     for out_file in out_files:
-        shutil.move((matlab_working_dir / out_file), (matlab_output_dir / out_file))
+        shutil.move((workdir / out_file), (outdir / out_file))
 
-    os.system('find ' + str(matlab_output_dir) + ' -name "*.mat" -exec ln -sf {} . \;') #TODO what is this?
+    os.system('find ' + str(outdir) + ' -name "*.mat" -exec ln -sf {} . \;') #TODO what is this?
+
+def makeIni(workdir: Path, outdir: Path):
+    octave.addpath(os.getcwd() + '/python/models/mom5/matlab_scripts')
+    octave.addpath(os.getcwd() + '/python/models/mom5/matlab_scripts/Matrix_extraction_code')
+    octave.addpath(outdir)
+    octave.run('MakeIni.m')

@@ -1,10 +1,9 @@
-function []=make_grid_mom5(deltaT)
+function []=make_grid_mom5(deltaT, rundir)
 
    gridType='spherical';
    sphericalGrid=1;
    useOverflows=0;
 
-   rundir='mom_grid_input'
    vertFile=fullfile(rundir,'ocean_vert.nc');
    depthFile=fullfile(rundir,'ht.nc');
    levelFile=fullfile(rundir,'temp_levels.nc');

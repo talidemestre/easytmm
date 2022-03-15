@@ -1,5 +1,5 @@
-function []=prep_files(deltaT)
-    make_grid_mom5(deltaT)
+function []=prep_files(deltaT, tempdir)
+    make_grid_mom5(deltaT, tempdir)
     clear
     make_box_data
     clear
