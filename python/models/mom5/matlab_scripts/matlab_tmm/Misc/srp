@@ -1,0 +1,37 @@
+#!/usr/bin/perl --
+
+((@ARGV ge 1) && (@ARGV le 3)) || die "Usage: string1 string2 [target_file]\n";
+
+$exchange1 = shift;
+$exchange2 = shift;
+$target    = shift;
+
+if (defined($target)) {
+  open(T,$target) || die "Cannot open $target: $!\n";
+  $tmp_id = $$;
+  $tmp_file = join("",$tmp_id,".srp");
+	open(C,">$tmp_file") || die "Cannot open $tmp_file: $!\n";
+	while(<T>){
+	$_ =~ s/$exchange1/$exchange2/g;
+	print C;
+        }
+  close(T); close(C);
+  system "cp $tmp_file $target";
+  system "rm $tmp_file";
+  }
+  else {
+      @files = <*>;
+      foreach $file (@files) {
+                     open(T,$file) || die "Cannot open $file: $!\n";
+                     $tmp_id = $$;
+                     $tmp_file = join("",$tmp_id,".srp");
+	             open(C,">$tmp_file") || die "Cannot open $tmp_file: $!\n";
+	             while(<T>){
+	             $_ =~ s/$exchange1/$exchange2/g;
+	             print C;
+		     }
+                 close(T); close(C);
+                 system "cp $tmp_file $file";
+                 system "rm $tmp_file";
+		 }
+  }
