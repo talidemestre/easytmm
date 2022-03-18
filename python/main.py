@@ -35,6 +35,9 @@ def main(args: Namespace):
     except KeyError:
         teardown(args)
         raise NotImplementedError("No such model as {}!".format(args.model))
+    except Exception as e:
+        teardown(args)
+        raise e
 
 def teardown(args: Namespace):
     os.system('rm -rf ' + str(args.output))
