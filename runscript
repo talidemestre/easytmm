@@ -1,7 +1,12 @@
-#PBS -l storage=gdata/hh5+scratch/v45
-module purge
-module load netcdf/4.8.0
-module load octave/5.2.0
+#PBS -l storage=gdata/hh5+gdata/v45+scratch/v45
 source /scratch/v45/tm8938/projects/easytmm/venv/bin/activate
 
-/scratch/v45/tm8938/projects/easytmm/python/main.py -s /home/156/tm8938/projects/easytmm/python/models/mom5/matlab_scripts/mom_grid_input -i /g/data/v45/dkh157/mom/input/a38_c8_cold -m mom5
+module unload netcdf hdf5
+
+module load hdf5/1.10.7
+module load netcdf/4.8.0
+module load octave/5.2.0
+
+export HDF5_DISABLE_VERSION_CHECK=2
+
+python3 /scratch/v45/tm8938/projects/easytmm/python/main.py -s /g/data/e14/rmh561/access-om2/archive/1deg_jra55_ryf_red3DSK_C9 -i /g/data/ik11/inputs/access-om2/input_20200530/mom_1deg -m mom5
