@@ -6,17 +6,9 @@ import numpy as np
 ## Modified from code written by David K. Hutchinson
 ## TODO: Ask Dave for Comments
 def check_levels(tempdir: Path):
-    f = nc.Dataset((tempdir / 'topog.nc'),'r')
-    levels = f.variables['num_levels'][:]
-    topog = f.variables['depth'][:]
-    f.close()
-
     f = nc.Dataset((tempdir / 'ht.nc'),'r')
     ht = f.variables['ht'][:]
-    st = f.variables['st_ocean'][:]
-    st_e = f.variables['st_edges_ocean'][:]
     f.close()
-    zb = st_e[1:]
 
     f = nc.Dataset((tempdir / 'temp.nc'),'r')
     temp = f.variables['temp'][:]
@@ -32,8 +24,6 @@ def check_levels(tempdir: Path):
             lev_new[j,i] = t.mask.argmax()
             if not t.mask[nz-1]:
                 lev_new[j,i] = nz
-
-    diff = lev_new - levels
 
     # unlink file to ensure we are creating in temp directory
     (tempdir / 'temp_levels.nc').unlink(missing_ok=True)

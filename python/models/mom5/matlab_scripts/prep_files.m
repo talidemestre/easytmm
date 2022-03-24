@@ -11,6 +11,6 @@ function []=prep_files(deltaT, tempdir)
     clear
     make_matrix_extraction_run_data
     clear
-    make_profile_data
-    clear
+    % make_profile_data
+    % clear
 end

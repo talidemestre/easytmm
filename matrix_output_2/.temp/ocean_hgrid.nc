@@ -1,0 +1,1 @@
+/g/data/ik11/inputs/access-om2/input_20200530/mom_1deg/ocean_hgrid.nc

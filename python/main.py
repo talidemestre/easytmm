@@ -24,9 +24,14 @@ def main(args: Namespace):
     # check for output directory, fail if already exists
     args.output.mkdir(parents=False, exist_ok=False)
 
+
     # create a symlink of all files in source directory in temp directory
     tempdir = (args.output / ".temp")
     tempdir.mkdir(parents=False, exist_ok=False)
+
+    print("main")
+    print(str(tempdir))
+    
     os.system('ln -s ' + str(args.source) + '/* ' +str(tempdir)) # TODO, find a better war to do this
 
     # call model preprocess script

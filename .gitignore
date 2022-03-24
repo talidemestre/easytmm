@@ -7,3 +7,6 @@ boxes
 boxnum 
 grid
 runscript.*
+matlab_install
+set*
+*.mat

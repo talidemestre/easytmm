@@ -48,13 +48,13 @@ function []=MakeIni(tmm_libs)
             varName=[ptrName '_' sprintf('%02d',iTracerNum)];        
             fn=[varName '.nc'];
             copyfile(mom5TemplateFile, fn)
-            ncid = netcdf_open(fn,'NC_WRITE');  
-            varId = netcdf_inqVarID(ncid,'age_global');      
-            netcdf_reDef(ncid);
-            netcdf_renameVar(ncid,varId,varName);
-            netcdf_endDef(ncid);
-            netcdf_putVar(ncid,varId,TR);
-            netcdf_close(ncid)   
+            ncid = netcdf.open(fn,'NC_WRITE');  
+            varId = netcdf.inqVarID(ncid,'age_global');      
+            netcdf.reDef(ncid);
+            netcdf.renameVar(ncid,varId,varName);
+            netcdf.endDef(ncid);
+            netcdf.putVar(ncid,varId,TR);
+            netcdf.close(ncid)   
             movefile(fn, dd)
         end
         disp(['Okay to start run number ' sprintf('%02d',runId)])

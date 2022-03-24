@@ -5,6 +5,8 @@ maxVal=0;
 minVal=1e-30;
 ptrName='ptr';
 mygcm='MOM5';
-mom5TemplateFile='/home/tali/projects/easytmm/python/models/mom5/matlab_scripts/mom_grid_input/ocean_age.res.nc';
+mom5TemplateFile='/g/data/e14/rmh561/access-om2/archive/1deg_jra55_ryf_red3DSK_C9/restart100/ocean/ocean_age.res.nc';
 tendFile='MATRIX';  
+
+
 

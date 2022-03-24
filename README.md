@@ -8,3 +8,7 @@ module load octave/5.2.0
 octave
 > pkg install -forge netcdf
 ```
+
+```
+qsub -I  -P v45 -l mem=8GB  -l storage=gdata/hh5+gdata/v45+scratch/v45+gdata/e14+gdata/ik11
+```

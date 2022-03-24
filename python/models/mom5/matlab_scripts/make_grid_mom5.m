@@ -12,7 +12,7 @@ function []=make_grid_mom5(deltaT, rundir)
 
    x=ncread(depthFile,'xt_ocean'); % nominal longitude
    y=ncread(depthFile,'yt_ocean'); % nominal latitude
-   z=ncread(depthFile,'st_ocean');
+   z=ncread(dzFile,'st_ocean');
 
    nx=length(x);
    ny=length(y);
@@ -46,7 +46,7 @@ function []=make_grid_mom5(deltaT, rundir)
    end
 
    % figure out dz
-   zb=ncread(depthFile,'st_edges_ocean'); % bottom of cells
+   zb=ncread(dzFile,'st_edges_ocean'); % bottom of cells
    dznom=diff(zb);
    zb=zb(2:end);
 
@@ -78,7 +78,8 @@ function []=make_grid_mom5(deltaT, rundir)
 
    dphi=dx;
    dth=dy;
-
+   
    save grid kd kw nx ny nz x y z dv ideep bathy dznom dz dx dy dth dphi ...
       da sphericalGrid deltaT gridType useOverflows
+   
 end
