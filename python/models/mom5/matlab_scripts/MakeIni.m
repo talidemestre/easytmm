@@ -1,4 +1,4 @@
-function []=MakeIni(tmm_libs)
+function []=MakeIni(tmm_libs, outdir)
 
     try
     matrixCalcInfo
@@ -21,8 +21,8 @@ function []=MakeIni(tmm_libs)
         maxTracers=length(depths);
         iTiles=tracerTiles{iSet};
         numTiles=length(iTiles);
-        dd=sprintf('set_%02d', runId);
-        mkdir dd
+        dd=sprintf(strcat(outdir, 'set_%02d'), runId);
+        mkdir(dd)
 
         disp(['Generating ICs for Set ' int2str(iSet)])
 
