@@ -21,7 +21,7 @@ function []=MakeIni(tmm_libs, outdir)
         maxTracers=length(depths);
         iTiles=tracerTiles{iSet};
         numTiles=length(iTiles);
-        dd=sprintf(strcat(outdir, 'set_%02d'), runId);
+        dd=sprintf(strcat(outdir, '/set_%02d'), runId);
         mkdir(dd)
 
         disp(['Generating ICs for Set ' int2str(iSet)])
