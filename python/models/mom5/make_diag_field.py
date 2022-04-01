@@ -9,8 +9,8 @@ def make_diag_field(tempdir: Path):
     header = f.readlines()[0:2]
     f.close()
 
-
-    os.system("cp --remove-destination `readlink {}` {}".format(str(diag_file), str(diag_file)))
+    if diag_file.is_symlink():
+        os.system("cp --remove-destination `readlink {}` {}".format(str(diag_file), str(diag_file)))
     
     f = open(str(diag_file),'w')
     f.write(header[0])
