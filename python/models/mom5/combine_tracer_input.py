@@ -1,4 +1,5 @@
 from pathlib import Path
+from tqdm import tqdm
 
 import netCDF4 as nc
 import numpy as np
@@ -11,7 +12,8 @@ def combine_tracer_input(outdir: Path):
     ny = 300
     nx = 360 ## TODO:Pass in
 
-    for i in range(2,ntile+1):
+    print("Combining tracer input:")
+    for i in tqdm(range(2,ntile+1)):
         file_tmp = "{}/tracer_set_tmp.nc".format(str(outdir))
         file_out = "{}/tracer_set_{:02d}.nc".format(str(outdir), i)
         fo = nc.Dataset(file_tmp, 'w') ## TODO: This gets a permission denied, probably dont have write permissions to the set directory for whatever reason.
@@ -48,6 +50,6 @@ def combine_tracer_input(outdir: Path):
             var_o[:] = var[:]
         fo.close()
         
-        os.system('rm {}/set_{:02d}/ptr_??.nc'.format(str(outdir), i))
+        # os.system('rm {}/set_{:02d}/ptr_??.nc'.format(str(outdir), i))
         os.system('nccopy -d5 %s %s' % (file_tmp, file_out))
         os.system('rm {}'.format((file_tmp)))

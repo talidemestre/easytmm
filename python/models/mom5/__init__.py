@@ -21,6 +21,6 @@ def preprocess(args: Namespace, tempdir: Path):
     process_ocean_nc_files(tempdir) #extract additional nc files
     check_levels(tempdir) # create temp_levels.nc
     make_vert(tempdir) # create ocean_vert.nc
-    matlab_prep(tempdir) # matlab creates preprocessing files
-    combine_tracer_input(tempdir / "matlab_data") # combine preprocessing inputs ## TODO: Make matlab path a consistent field
+    matlab_output_dir = matlab_prep(tempdir) # matlab creates preprocessing files
+    combine_tracer_input(matlab_output_dir) # combine preprocessing inputs
     make_diag_field(tempdir) # add diagnostics to tracer file

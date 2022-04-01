@@ -1,12 +1,22 @@
-function []=MakeIni(tmm_libs, outdir)
+function []=MakeIni(tmm_libs, outdir, mom5TemplateFile)
+
+
+    % matrixCalcInfo
+    runId=1
+    numExpTend=12;
+    numImpTend=12;
+    maxVal=0;
+    minVal=1e-30;
+    ptrName='ptr';
+    mygcm='MOM5';
+    tendFile='MATRIX';  
 
     try
-    matrixCalcInfo
 
     addpath(fullfile(tmm_libs,'Misc'))
     addpath(fullfile(tmm_libs,'TMM'))
     addpath(fullfile(tmm_libs,'gcmfaces'))
-
+ 
     load grid nx ny nz gridType
     load matrix_extraction_run_data
     load boxes nb ixBox iyBox izBox

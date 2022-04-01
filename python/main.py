@@ -45,7 +45,8 @@ def main(args: Namespace):
         raise e
 
 def teardown(args: Namespace):
-    os.system('rm -rf ' + str(args.output))
+    print("stubbing teardown")
+    # os.system('rm -rf ' + str(args.output))
 
 
 args = setup()

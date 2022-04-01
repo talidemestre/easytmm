@@ -13,8 +13,7 @@ def matlab_prep(tempdir: Path):
     
     print(matlab.__file__)
     eng = matlab.engine.start_matlab()
-    print('engine started')
-
+    print('Matlab engine started.')
     eng.addpath("{}".format(os.getcwd() + '/python/models/mom5/matlab_scripts'),nargout=0)
     eng.addpath("{}".format(os.getcwd() + '/python/models/mom5/matlab_scripts/Matrix_extraction_code'),nargout=0)
     eng.addpath("{}".format(str(matlab_output_dir) ))
@@ -23,6 +22,8 @@ def matlab_prep(tempdir: Path):
     prep_files(tempdir, eng)
     clear_current(matlab_working_dir, matlab_output_dir)
     makeIni(matlab_working_dir, matlab_output_dir, eng)
+
+    return matlab_output_dir
 
 
 def clear_previous(workdir: Path, outdir: Path):
@@ -42,4 +43,4 @@ def clear_current(workdir: Path, outdir: Path):
     # os.system('find ' + str(outdir) + ' -name "*.mat" -exec ln -sf {} . \;') #TODO what is this?
 
 def makeIni(workdir: Path, outdir: Path, eng):
-    eng.MakeIni(os.getcwd() + '/python/models/mom5/matlab_scripts/matlab_tmm', str(outdir), nargout=0)
+    eng.MakeIni(os.getcwd() + '/python/models/mom5/matlab_scripts/matlab_tmm', str(outdir), '/g/data/e14/rmh561/access-om2/archive/1deg_jra55_ryf_red3DSK_C9/restart100/ocean/ocean_age.res.nc', nargout=0)
