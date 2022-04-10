@@ -13,7 +13,7 @@ def combine_tracer_input(outdir: Path):
     nx = 360 ## TODO:Pass in
 
     print("Combining tracer input:")
-    for i in tqdm(range(2,ntile+1)):
+    for i in tqdm(range(1,ntile+1)):
         file_tmp = "{}/tracer_set_tmp.nc".format(str(outdir))
         file_out = "{}/tracer_set_{:02d}.nc".format(str(outdir), i)
         fo = nc.Dataset(file_tmp, 'w') ## TODO: This gets a permission denied, probably dont have write permissions to the set directory for whatever reason.

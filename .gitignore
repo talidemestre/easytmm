@@ -10,5 +10,4 @@ runscript.*
 matlab_install
 set*
 *.mat
-matrix_output_2
-matrix_output_backup
+matrix_output_*

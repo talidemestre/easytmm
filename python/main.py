@@ -1,6 +1,6 @@
 from argparse import ArgumentParser, Namespace
 import pathlib
-import os
+import subprocess
 from models import *
 
 model_map = {
@@ -18,6 +18,8 @@ def setup():
                     help='path to output matrices', default="./matrix_output", type=pathlib.Path)
     parser.add_argument('-m', '--model', metavar='"Model Type"', 
                     help='input model type: mom5, stub', default="mom5")
+    parser.add_argument('-n', '--name', metavar='"Model Type"', 
+                    help='input model name')
     return parser.parse_args()
 
 def main(args: Namespace):  
@@ -32,7 +34,7 @@ def main(args: Namespace):
     print("main")
     print(str(tempdir))
     
-    os.system('ln -s ' + str(args.source) + '/* ' +str(tempdir)) # TODO, find a better war to do this
+    subprocess.check_call('ln  -s ' + str(args.source) + '/* ' + str(tempdir), shell=True) # TODO, find a better war to do this
 
     # call model preprocess script
     try:
@@ -46,7 +48,8 @@ def main(args: Namespace):
 
 def teardown(args: Namespace):
     print("stubbing teardown")
-    # os.system('rm -rf ' + str(args.output))
+    # subprocess.run(['cp', 'matrix_output', 'matrix_output_duplicate', '-r']) #TODO make this take temp directory arg
+    os.system('rm -rf ' + str(args.output))
 
 
 args = setup()
