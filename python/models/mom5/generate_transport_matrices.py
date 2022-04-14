@@ -1,11 +1,12 @@
 from pathlib import Path
 from tokenize import String
 from tqdm import tqdm 
+from time import sleep
 
 import subprocess
 import os
 
-def generate_transport_matrices(tempdir: Path, output_dir: Path, name: String):
+def generate_transport_matrices(tempdir: Path, output_dir: Path, rundir: Path):
     ntile = 38
 
     field_table_input = '''
@@ -18,33 +19,86 @@ const_init_tracer = .false.
 const_init_value = 1.0
     '''
 
-    temp_run_output = tempdir / "archive_tracer"
+    config_yaml_input = '''
+laboratory: {}
+experiment: {}
+jobname: {}
+    '''
+
+    name = output_dir.stem
+
+    temp_run_output = tempdir / "archive"
     temp_run_output.mkdir(exist_ok=True)
 
     highest_output = os.popen('ls ' + str(output_dir) + " | grep '^output[0-9]\+$' |  sort -n | tail -n1").read()[:-1]
     highest_restart = os.popen('ls ' + str(output_dir) + " | grep '^restart[0-9]\+$' |  sort -n | tail -n1").read()[:-1]
+    highest_output = "output050"   #TODO: not this
+    highest_restart = "restart050" #TODO: not this
 
+    parent_run_dir = (tempdir / "run_dirs")
+    parent_run_dir.mkdir(exist_ok=True)
+
+    job_list = []
 
     print("setting up model runs:")
     for i in tqdm(range(1,ntile+1)):
         current_tile = "{}_{:02d}".format(name,i)
-
-        # ceate directory for tile
-        subprocess.call("rm -rf {}/{}".format(temp_run_output, current_tile), shell=True)
-        subprocess.call("mkdir {}/{}".format(temp_run_output, current_tile), shell=True)
-        subprocess.call("mkdir {}/{}".format(temp_run_output, current_tile), shell=True)
+        current_output_tile = temp_run_output / current_tile
+        current_output_tile.mkdir(exist_ok=True)
 
         # Get output and restart directories
-        subprocess.call("cp -sr {} {}/".format(str(output_dir / highest_output), str(temp_run_output / current_tile )), shell=True)
-        subprocess.call("cp -sr {} {}/".format(str(output_dir / highest_restart), str(temp_run_output / current_tile)), shell=True)
+        subprocess.call("cp -sr {} {}/".format(str(output_dir / highest_output), str(current_output_tile )), shell=True)
+        subprocess.call("cp -sr {} {}/".format(str(output_dir / highest_restart), str(current_output_tile)), shell=True)
 
         # add tracer set to restart directories
-        subprocess.call("cp {} {}".format(str(tempdir / "matlab_data" / "tracer_set_{:02d}.nc".format(i)), str(temp_run_output / current_tile / highest_restart / "ocean")), shell=True)
+        subprocess.call("cp {} {}".format(str(tempdir / "matlab_data" / "tracer_set_{:02d}.nc".format(i)), str(current_output_tile / highest_restart / "ocean")), shell=True)
 
         # remove existing field_table
-        subprocess.call("rm {}".format( str(temp_run_output / current_tile / highest_output/ "ocean" / "field_table")), shell=True)
+        subprocess.call("cp --remove-destination `readlink {}` {}".format( str(current_output_tile / highest_output/ "ocean" / "field_table"), str(current_output_tile / highest_output/ "ocean" / "field_table")), shell=True) #TODO: unduplicate arguments
 
+        # next block, run directories TODO: better comments
+        current_run_dir = (parent_run_dir / "model_run_{:02d}".format(i))
+        
+        subprocess.call("cp -sr {} {}".format(str(rundir), str(current_run_dir), i), shell=True)
+
+        # write lab and run directory to config file
+        config_file = str(current_run_dir / "config.yaml")
+        subprocess.call("cp --remove-destination `readlink {}` {}".format(config_file, config_file), shell=True) #TODO: unduplicate arguments
+        f = open(config_file, "a")
+        job_name = "etmm_tile_{:02d}".format(i)
+        f.write(config_yaml_input.format(tempdir, current_tile, job_name))
+        f.close()
+        job_list.append(job_name)
+        
         # write tracers to field_table file
-        f = open(str(temp_run_output / current_tile / highest_output/ "ocean" / "field_table"), "w")
+        f = open(str(current_run_dir / "ocean" / "field_table"), "a")
         f.write(field_table_input.format(i))
         f.close()
+
+        subprocess.call("cp {} {}".format(str(tempdir / "diag_table"), str(current_run_dir / "ocean" / "diag_table"), i), shell=True)
+
+        subprocess.call('payu run'.format(current_run_dir), cwd=str(current_run_dir), shell=True, stdout=subprocess.DEVNULL)
+      
+        # TODO: make period only 1 year always
+        # accessom2nml_file = str(current_run_dir / "model_run_{:02d}".format(i) / "accessom2.nml")
+        # subprocess.call("cp --remove-destination `readlink {}` {}".format(accessom2nml_file, accessom2nml_file), shell=True) #TODO: unduplicate arguments
+
+        # f = open(accessom2nml_file, "a")
+        # for line in file:
+        #     line = line.strip()
+        #     changes = line.replace("hardships", "situations")
+        #     replacement = replacement + changes + "\n"
+        # f.close()
+
+        #TODO: block on qsub jobs https://stackoverflow.com/questions/11525214/wait-for-set-of-qsub-jobs-to-complete 
+
+#Block until jobs are done
+print("Waiting for jobs...")
+for job_name in tqdm(job_list):
+    while True: 
+        job_status = os.popen('qstat | grep {}'.format(job_name)).read()[:-1]
+        if job_status != "":
+            sleep(2)
+        else:
+            break
+

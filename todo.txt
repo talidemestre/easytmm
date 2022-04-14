@@ -1,0 +1,22 @@
+[X] 1. Undo name thing, pass in access-om2/archive/<name>
+
+[x] make run directories
+
+#config.yaml
+
+[x] add add top level something like:
+    ```
+    laboratory: /scratch/v45/tm8938/projects/easytmm/matrix_output_duplicate/.temp
+    experiment: 1deg_jra55_ryf_red3DSK_C9_01
+    ```
+
+#accessom2.nml
+[-] ```
+    restart_period = 1, 0, 0
+    ```
+
+#diag_table and field_table
+[x] both of these files need to be in <run directory>/ocean
+
+#walltime
+[ ] change to 1 hour

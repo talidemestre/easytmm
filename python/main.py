@@ -15,12 +15,12 @@ def setup():
                         help='path to original model run outputs', required=True, type=pathlib.Path)
     parser.add_argument('-i', '--source_inputs', metavar='/path/to/original/input',
                         help='path to original model run inputs', required=False, type=pathlib.Path)
+    parser.add_argument('-r', '--run_directory', metavar='/path/to/original/run/directory',
+                        help='path to original model run directory', required=False, type=pathlib.Path)
     parser.add_argument('-o', '--output', metavar='/path/to/matrix/output', 
                     help='path to output matrices', default="./matrix_output", type=pathlib.Path)
     parser.add_argument('-m', '--model', metavar='"Model Type"', 
                     help='input model type: mom5, stub', default="mom5")
-    parser.add_argument('-n', '--name', metavar='"Model Type"', 
-                    help='input model name')
     return parser.parse_args()
 
 def main(args: Namespace):  

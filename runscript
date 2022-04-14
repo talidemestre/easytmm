@@ -5,4 +5,4 @@ module load matlab/R2021b
 module load matlab_licence/anu
 
 # python3 /scratch/v45/tm8938/projects/easytmm/python/main.py -s /home/156/tm8938/projects/easytmm/python/models/mom5/matlab_scripts/mom_grid_input -i /g/data/v45/dkh157/mom/input/a38_c8_cold -m mom5 
-python3 /scratch/v45/tm8938/projects/easytmm/python/main.py -s /g/data/e14/rmh561/access-om2/ -n 1deg_jra55_ryf_red3DSK_C9 -i /g/data/ik11/inputs/access-om2/input_20200530/mom_1deg -m mom5
+python3 /scratch/v45/tm8938/projects/easytmm/python/main.py -s /g/data/e14/rmh561/access-om2/archive/1deg_jra55_ryf_red3DSK_C9 -i /g/data/ik11/inputs/access-om2/input_20200530/mom_1deg --run_directory /scratch/v45/tm8938/projects/easytmm_srcs/1deg_jra55_ryf -m mom5

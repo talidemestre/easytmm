@@ -23,8 +23,14 @@ def preprocess(args: Namespace, tempdir: Path):
         raise ValueError("mom5 implementation requires a '--name' is specified for the climate model run")
 
 
+    try:
+        assert(args.run_directory != None)
+    except:
+        raise ValueError("mom5 implementation requires a '--run_directory' is specified for the climate model run")
+
+
     # get latest run and softlink files to .temp
-    output_dir = args.source / 'archive' / args.name
+    output_dir = args.source
     highest_output = os.popen('ls ' + str(output_dir) + " | grep '^output[0-9]\+$' |  sort -n | tail -n1").read()[:-1] #TODO better way for this 
     output_dir_ocean = output_dir / highest_output / 'ocean'
     subprocess.check_call('ln -s ' + str(output_dir_ocean) + '/* ' +  str(tempdir), shell=True) # TODO, find a better war to do this
@@ -37,6 +43,5 @@ def preprocess(args: Namespace, tempdir: Path):
     make_vert(tempdir) # create ocean_vert.nc
     matlab_output_dir = matlab_prep(tempdir) # matlab creates preprocessing files
     combine_tracer_input(matlab_output_dir) # combine preprocessing inputs
-    make_diag_field(tempdir) # add diagnostics to tracer filetempdir / 'archive' / args.name
-    
-    generate_transport_matrices(tempdir, output_dir, args.name)
+    make_diag_field(tempdir) # add diagnostics to tracer filetempdir    
+    generate_transport_matrices(tempdir, output_dir)
