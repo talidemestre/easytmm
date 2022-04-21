@@ -14,8 +14,11 @@ def matlab_prep(tempdir: Path):
     print(matlab.__file__)
     eng = matlab.engine.start_matlab()
     print('Matlab engine started.')
-    eng.addpath("{}".format(os.getcwd() + '/python/models/mom5/matlab_scripts'),nargout=0)
-    eng.addpath("{}".format(os.getcwd() + '/python/models/mom5/matlab_scripts/Matrix_extraction_code'),nargout=0)
+    eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts")),nargout=0)
+    eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "matlab_tmm" / "gcmfaces")),nargout=0)
+    eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "matlab_tmm" / "Misc")),nargout=0)
+    eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "matlab_tmm" / "TMM")),nargout=0)
+    eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "Matrix_extraction_code")),nargout=0)
     eng.addpath("{}".format(str(matlab_output_dir) ))
 
     clear_previous(matlab_working_dir, matlab_output_dir)

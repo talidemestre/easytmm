@@ -1,5 +1,4 @@
 from pathlib import Path
-from tokenize import String
 from tqdm import tqdm 
 from time import sleep
 
@@ -17,12 +16,14 @@ vertical-advection-scheme = mdfl_sweby
 restart_file = tracer_set_{:02d}.nc
 const_init_tracer = .false.
 const_init_value = 1.0
+/
     '''
 
     config_yaml_input = '''
 laboratory: {}
 experiment: {}
 jobname: {}
+runlog: False
     '''
 
     name = output_dir.stem
@@ -71,13 +72,32 @@ jobname: {}
         job_list.append(job_name)
         
         # write tracers to field_table file
-        f = open(str(current_run_dir / "ocean" / "field_table"), "a")
+        field_table_file = str(current_run_dir / "ocean" / "field_table")
+        subprocess.call("cp --remove-destination `readlink {}` {}".format(field_table_file, field_table_file), shell=True) #TODO: unduplicate arguments
+        f = open(field_table_file, "a")
         f.write(field_table_input.format(i))
         f.close()
 
+        # overwrite max_tracers in ocean.nml
+        ocean_input_nml = str(current_run_dir / "ocean" / "input.nml")
+        subprocess.call("cp --remove-destination `readlink {}` {}".format(ocean_input_nml, ocean_input_nml), shell=True) #TODO: unduplicate arguments
+        temp_file = ''
+        f = open(ocean_input_nml, 'r')
+        for line in f.readlines():
+            if "max_tracers" in line:
+                temp_file += '\tmax_tracers = 100\n'
+            else:
+                temp_file += line
+        f.close()
+        f = open(ocean_input_nml, 'w')
+        f.write(temp_file)
+        f.close()
+
+
+
         subprocess.call("cp {} {}".format(str(tempdir / "diag_table"), str(current_run_dir / "ocean" / "diag_table"), i), shell=True)
 
-        subprocess.call('payu run'.format(current_run_dir), cwd=str(current_run_dir), shell=True, stdout=subprocess.DEVNULL)
+        subprocess.call('payu sweep; payu run'.format(current_run_dir), cwd=str(current_run_dir), shell=True, stdout=subprocess.DEVNULL)
       
         # TODO: make period only 1 year always
         # accessom2nml_file = str(current_run_dir / "model_run_{:02d}".format(i) / "accessom2.nml")
@@ -92,13 +112,14 @@ jobname: {}
 
         #TODO: block on qsub jobs https://stackoverflow.com/questions/11525214/wait-for-set-of-qsub-jobs-to-complete 
 
-#Block until jobs are done
-print("Waiting for jobs...")
-for job_name in tqdm(job_list):
-    while True: 
-        job_status = os.popen('qstat | grep {}'.format(job_name)).read()[:-1]
-        if job_status != "":
-            sleep(2)
-        else:
-            break
+    #Block until jobs are done
+    print("Waiting for jobs...")
+    for job_name in tqdm(job_list):
+        while True: 
+            job_status = os.popen('qstat | grep {}'.format(job_name)).read()[:-1]
+            if job_status != "":
+                sleep(2)
+            else:
+                break
 
+    return parent_run_dir / name

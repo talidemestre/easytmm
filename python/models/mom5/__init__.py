@@ -10,6 +10,7 @@ from .process_ocean_nc_files import process_ocean_nc_files
 from .combine_tracer_input import combine_tracer_input
 from .make_diag_field import make_diag_field
 from .generate_transport_matrices import generate_transport_matrices
+from .matlab_postprocess import matlab_postprocess
 
 def preprocess(args: Namespace, tempdir: Path): 
     try:
@@ -44,4 +45,6 @@ def preprocess(args: Namespace, tempdir: Path):
     matlab_output_dir = matlab_prep(tempdir) # matlab creates preprocessing files
     combine_tracer_input(matlab_output_dir) # combine preprocessing inputs
     make_diag_field(tempdir) # add diagnostics to tracer filetempdir    
-    generate_transport_matrices(tempdir, output_dir)
+    
+    base_model_out = generate_transport_matrices(tempdir, output_dir)
+    matlab_postprocess(base_model_out)
