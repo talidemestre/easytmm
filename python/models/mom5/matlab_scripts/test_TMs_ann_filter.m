@@ -1,14 +1,12 @@
 %% load in
-function []=GetTransport(matrix_path, base_path)
-
-  addpath('/Users/davidhutchinson/Dropbox/UNSW/data/tmm_matlab/TMM');
+function []=test_stability(base_path, matrix_path)
 
   matrix_path=pwd;
   base_path=pwd;
 
-  gridFile=fullfile(base_path,'grid');
-  boxFile=fullfile(matrix_path,'boxes');
-  matrixFile=fullfile(matrix_path,'TMs','matrix_nocorrection_annualmean');
+  gridFile=fullfile(base_path,'grid.mat');
+  boxFile=fullfile(base_path,'boxes.mat');
+  matrixFile=fullfile(matrix_path,'matrix_nocorrection_annualmean');
 
   load(gridFile,'x','y','z','deltaT')
   load(boxFile,'nb','volb','Xboxnom','ixBox','iyBox','izBox')

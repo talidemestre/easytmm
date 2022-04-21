@@ -11,6 +11,8 @@ def matlab_postprocess(base_model_out: Path):
     name = base_model_out.stem
     root = base_model_out.parent
 
+    temp = base_model_out.parent.parent
+
     assembled_transport_output_folder = root / 'ocean_transport_out'
     assembled_transport_output_folder.mkdir(exist_ok=True)
 
@@ -35,7 +37,7 @@ def matlab_postprocess(base_model_out: Path):
     eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "Matrix_extraction_code")),nargout=0)
     eng.GetTransport(str(assembled_transport_output_folder), nargout=0)
     eng.get_transport_matrix_all(str(assembled_transport_output_folder), nargout=0)
-
+    eng.test_stability(str(temp), str(assembled_transport_output_folder), nargout=0)
 
 
 
