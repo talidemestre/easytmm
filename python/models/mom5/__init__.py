@@ -19,32 +19,34 @@ def preprocess(args: Namespace, tempdir: Path):
         raise ValueError("mom5 implementation requires a '--source_input' directory is specified")
 
     try:
-        assert(args.name != None)
-    except:
-        raise ValueError("mom5 implementation requires a '--name' is specified for the climate model run")
-
-
-    try:
         assert(args.run_directory != None)
     except:
         raise ValueError("mom5 implementation requires a '--run_directory' is specified for the climate model run")
 
 
-    # get latest run and softlink files to .temp
-    output_dir = args.source
+    # make a copy of a successful run as a base reference
+    output_dir = tempdir / 'archive' / args.source.stem
+    output_dir.mkdir(parents=True)
+    subprocess.check_call('ln  -s ' + str(args.source) + '/* ' + str(output_dir), shell=True) # TODO, find a better war to do this
+
+
+    # get latest run and softlink files to a scratch directory
+    scratch_dir = tempdir / 'scratch'
+    scratch_dir.mkdir()
     highest_output = os.popen('ls ' + str(output_dir) + " | grep '^output[0-9]\+$' |  sort -n | tail -n1").read()[:-1] #TODO better way for this 
-    output_dir_ocean = output_dir / highest_output / 'ocean'
-    subprocess.check_call('ln -s ' + str(output_dir_ocean) + '/* ' +  str(tempdir), shell=True) # TODO, find a better war to do this
+    output_dir_ocean = args.source / highest_output / 'ocean'
+    subprocess.check_call('ln -s ' + str(output_dir_ocean) + '/* ' +  str(scratch_dir), shell=True) # TODO, find a better war to do this
 
-    (tempdir / 'ocean_hgrid.nc').symlink_to(args.source_inputs / 'ocean_hgrid.nc')
-    (tempdir / 'topog.nc').symlink_to(args.source_inputs / 'topog.nc')
 
-    process_ocean_nc_files(tempdir) #extract additional nc files
-    check_levels(tempdir) # create temp_levels.nc
-    make_vert(tempdir) # create ocean_vert.nc
-    matlab_output_dir = matlab_prep(tempdir) # matlab creates preprocessing files
+    (scratch_dir / 'ocean_hgrid.nc').symlink_to(args.source_inputs / 'ocean_hgrid.nc')
+    (scratch_dir / 'topog.nc').symlink_to(args.source_inputs / 'topog.nc')
+
+    process_ocean_nc_files(scratch_dir) #extract additional nc files
+    check_levels(scratch_dir) # create temp_levels.nc
+    make_vert(scratch_dir) # create ocean_vert.nc
+    matlab_output_dir = matlab_prep(scratch_dir) # matlab creates preprocessing files
     combine_tracer_input(matlab_output_dir) # combine preprocessing inputs
-    make_diag_field(tempdir) # add diagnostics to tracer filetempdir    
+    make_diag_field(scratch_dir) # add diagnostics to tracer filetempdir    
     
-    base_model_out = generate_transport_matrices(tempdir, output_dir)
+    base_model_out = generate_transport_matrices(scratch_dir, output_dir, args.run_directory)
     matlab_postprocess(base_model_out)

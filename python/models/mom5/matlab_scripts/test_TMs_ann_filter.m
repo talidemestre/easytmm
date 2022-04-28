@@ -1,5 +1,5 @@
 %% load in
-function []=test_stability(base_path, matrix_path)
+function []=test_TMs_ann_filter(base_path, matrix_path)
 
   matrix_path=pwd;
   base_path=pwd;
