@@ -5,7 +5,7 @@ from time import sleep
 import subprocess
 import os
 
-def generate_transport_matrices(tempdir: Path, output_dir: Path, rundir: Path):
+def generate_transport_matrices(scratchdir: Path, output_dir: Path, rundir: Path):
     ntile = 38
 
     field_table_input = '''
@@ -28,15 +28,14 @@ runlog: False
 
     name = output_dir.stem
 
-    temp_run_output = tempdir / "archive"
-    temp_run_output.mkdir(exist_ok=True)
-
+    temp_run_output = output_dir.parent
+    print (temp_run_output)
     highest_output = os.popen('ls ' + str(output_dir) + " | grep '^output[0-9]\+$' |  sort -n | tail -n1").read()[:-1]
     highest_restart = os.popen('ls ' + str(output_dir) + " | grep '^restart[0-9]\+$' |  sort -n | tail -n1").read()[:-1]
     highest_output = "output050"   #TODO: not this
     highest_restart = "restart050" #TODO: not this
 
-    parent_run_dir = (tempdir / "run_dirs")
+    parent_run_dir = (scratchdir / "run_dirs")
     parent_run_dir.mkdir(exist_ok=True)
 
     job_list = []
@@ -48,11 +47,11 @@ runlog: False
         current_output_tile.mkdir(exist_ok=True)
 
         # Get output and restart directories
-        subprocess.call("cp -sr {} {}/".format(str(output_dir / highest_output), str(current_output_tile )), shell=True)
-        subprocess.call("cp -sr {} {}/".format(str(output_dir / highest_restart), str(current_output_tile)), shell=True)
+        subprocess.call("cp -sr {} {}".format(str(output_dir / highest_output), str(current_output_tile )), shell=True)
+        subprocess.call("cp -rL {} {}".format(str(output_dir / highest_restart), str(current_output_tile)), shell=True)
 
         # add tracer set to restart directories
-        subprocess.call("cp {} {}".format(str(tempdir / "matlab_data" / "tracer_set_{:02d}.nc".format(i)), str(current_output_tile / highest_restart / "ocean")), shell=True)
+        subprocess.call("cp {} {}".format(str(scratchdir / "matlab_data" / "tracer_set_{:02d}.nc".format(i)), str(current_output_tile / highest_restart / "ocean")), shell=True)
 
         # remove existing field_table
         subprocess.call("cp --remove-destination `readlink {}` {}".format( str(current_output_tile / highest_output/ "ocean" / "field_table"), str(current_output_tile / highest_output/ "ocean" / "field_table")), shell=True) #TODO: unduplicate arguments
@@ -67,7 +66,7 @@ runlog: False
         subprocess.call("cp --remove-destination `readlink {}` {}".format(config_file, config_file), shell=True) #TODO: unduplicate arguments
         f = open(config_file, "a")
         job_name = "etmm_tile_{:02d}".format(i)
-        f.write(config_yaml_input.format(tempdir, current_tile, job_name))
+        f.write(config_yaml_input.format(scratchdir.parent, current_tile, job_name))
         f.close()
         job_list.append(job_name)
         
@@ -95,7 +94,7 @@ runlog: False
 
 
 
-        subprocess.call("cp {} {}".format(str(tempdir / "diag_table"), str(current_run_dir / "ocean" / "diag_table"), i), shell=True)
+        subprocess.call("cp {} {}".format(str(scratchdir / "diag_table"), str(current_run_dir / "ocean" / "diag_table"), i), shell=True)
 
         subprocess.call('payu sweep; payu run'.format(current_run_dir), cwd=str(current_run_dir), shell=True, stdout=subprocess.DEVNULL)
       
@@ -121,5 +120,3 @@ runlog: False
                 sleep(2)
             else:
                 break
-
-    return parent_run_dir / name

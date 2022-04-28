@@ -48,5 +48,5 @@ def preprocess(args: Namespace, tempdir: Path):
     combine_tracer_input(matlab_output_dir) # combine preprocessing inputs
     make_diag_field(scratch_dir) # add diagnostics to tracer filetempdir    
     
-    base_model_out = generate_transport_matrices(scratch_dir, output_dir, args.run_directory)
-    matlab_postprocess(base_model_out)
+    generate_transport_matrices(scratch_dir, output_dir, args.run_directory)
+    matlab_postprocess(output_dir)

@@ -6,8 +6,6 @@ function []=get_transport_matrix_all(matrix_path)
   totNumRuns=length(tracer_run_data.groups);
   Ir=[1:totNumRuns]';
 
-  !mkdir -p ./TMs
-
   for im=1:maxNumTend
     Aexp=assemble_transport_matrix_DH(Ir,matrix_path,12,im,[],1,maxNumTend);
     Aimp=assemble_transport_matrix_DH(Ir,matrix_path,12,im,[],2,maxNumTend);

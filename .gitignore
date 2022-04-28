@@ -12,3 +12,5 @@ set*
 *.mat
 matrix_output_*
 todo.txt
+*.bin
+*.nc

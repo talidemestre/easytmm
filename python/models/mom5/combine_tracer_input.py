@@ -7,10 +7,10 @@ import numpy as np
 import os
 
 def combine_tracer_input(outdir: Path):
-    ntile = 38
+    ntile = 38 ## read in from tracer tiles
     nz = 50
     ny = 300
-    nx = 360 ## TODO:Pass in
+    nx = 360 ## TODO: Pass in / read in readin
 
     print("Combining tracer input:")
     for i in tqdm(range(1,ntile+1)):

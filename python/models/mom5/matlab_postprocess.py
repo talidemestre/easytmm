@@ -6,24 +6,26 @@ import os
 import shutil
 
 def matlab_postprocess(base_model_out: Path):
-    ntile = 38
+    ntile = 38 #TODO : read in
+
     # assemble output files into one locations
     name = base_model_out.stem
     root = base_model_out.parent
 
     temp = base_model_out.parent.parent
+    scratch_dir = temp / 'scratch' # TODO: Pass down from above.
 
     assembled_transport_output_folder = root / 'ocean_transport_out'
     assembled_transport_output_folder.mkdir(exist_ok=True)
 
-    print("Assembling transport files...")
-    for i in range(1,ntile+1):
-        current_tile = "{}_{:02d}".format(name,i)
-        current_output_tile = root / current_tile
+    # print("Assembling transport files...")
+    # for i in range(1,ntile+1):
+    #     current_tile = "{}_{:02d}".format(name,i)
+    #     current_output_tile = root / current_tile
 
-        assembled_file = assembled_transport_output_folder / "transport_{:02d}.nc".format(i)
+    #     assembled_file = assembled_transport_output_folder / "transport_{:02d}.nc".format(i)
         
-        assembled_file.symlink_to(current_output_tile / "output051" / "ocean" / "ocean_transport.nc") #TODO: cant just alwasy take 51
+    #     assembled_file.symlink_to(current_output_tile / "output051" / "ocean" / "ocean_transport.nc") #TODO: cant just alwasy take 51
 
 
     print("Running matlab postprocess scripts...")
@@ -37,7 +39,8 @@ def matlab_postprocess(base_model_out: Path):
     eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "Matrix_extraction_code")),nargout=0)
     eng.GetTransport(str(assembled_transport_output_folder), nargout=0)
     eng.get_transport_matrix_all(str(assembled_transport_output_folder), nargout=0)
-    eng.test_TMs_ann_filter(str(temp), str(assembled_transport_output_folder), nargout=0)
+    eng.test_TMs_ann_filter(str(scratch_dir / "matlab_data"), str(assembled_transport_output_folder), nargout=0)
+    eng.make_input_files_for_periodic_mom(str(assembled_transport_output_folder), str(scratch_dir / "matlab_data"), '/scratch/v45/tm8938/projects/easytmm/sst_access_om2.nc', nargout=0)
 
 
 

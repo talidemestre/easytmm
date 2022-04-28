@@ -3,7 +3,7 @@ import matlab.engine
 import os
 import shutil
 
-out_files = ['basis_functions.mat', 'boxes.mat', 'boxnum.mat', 'links.mat', 'matrix_extraction_run_data.mat', 'tracer_tiles.mat']
+out_files = ['basis_functions.mat', 'boxes.mat', 'boxnum.mat', 'links.mat', 'matrix_extraction_run_data.mat', 'tracer_tiles.mat', 'grid.mat']
 
 
 def matlab_prep(tempdir: Path):
@@ -46,4 +46,4 @@ def clear_current(workdir: Path, outdir: Path):
     # os.system('find ' + str(outdir) + ' -name "*.mat" -exec ln -sf {} . \;') #TODO what is this?
 
 def makeIni(workdir: Path, outdir: Path, eng):
-    eng.MakeIni(os.getcwd() + '/python/models/mom5/matlab_scripts/matlab_tmm', str(outdir), '/g/data/e14/rmh561/access-om2/archive/1deg_jra55_ryf_red3DSK_C9/restart100/ocean/ocean_age.res.nc', nargout=0)
+    eng.MakeIni(os.getcwd() + '/python/models/mom5/matlab_scripts/matlab_tmm', str(outdir), '/g/data/e14/rmh561/access-om2/archive/1deg_jra55_ryf_red3DSK_C9/restart100/ocean/ocean_age.res.nc', nargout=0) # TODO: Dont hardcode this, pass in from highest restart directory?
