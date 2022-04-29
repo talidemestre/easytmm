@@ -3,9 +3,10 @@ import pathlib
 import os
 from scipy.io import loadmat
 
-tempdir = pathlib.Path('/scratch/v45/tm8938/projects/easytmm/matrix_output_duplicate/.temp')
+tempdir = pathlib.Path('/scratch/v45/tm8938/projects/easytmm/alternative_matrix_output_2/.temp')
 rundir = pathlib.Path('/scratch/v45/tm8938/projects/easytmm_srcs/1deg_jra55_ryf')
 
+scratchdir = tempdir / 'scratch'
 output_dir = tempdir / 'archive' / '1deg_jra55_ryf_red3DSK_C9'
 
 matlab_dir = tempdir / 'scratch' /'matlab_data'
@@ -18,11 +19,11 @@ print(f['nz'][0][0])
 
 f = loadmat(str(matlab_dir / 'tracer_tiles.mat'))
 print(f.keys())
-print(f['numGroups'][0][0])
+ntile = f['numGroups'][0][0]
 
 # combine_tracer_input(tempdir/"matlab_data")
 
-
+increment_models(scratchdir, output_dir, rundir, ntile)
 # matlab_output_dir = matlab_prep(tempdir / 'scratch', output_dir)
-# matlab_postprocess(output_dir)
+matlab_postprocess(output_dir, matlab_dir, tempdir.parent, ntile)
 # generate_transport_matrices(tempdir, output_dir, rundir)

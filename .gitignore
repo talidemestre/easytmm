@@ -11,6 +11,7 @@ matlab_install
 set*
 *.mat
 matrix_output_*
+alternative*
 todo.txt
 *.bin
 *.nc

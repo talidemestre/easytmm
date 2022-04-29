@@ -66,7 +66,6 @@ def preprocess(args: Namespace, tempdir: Path):
     
     # generate transport matrices and output in petsc format
     increment_models(scratch_dir, output_dir, args.run_directory, ntiles)
-    matlab_postprocess(output_dir, matlab_output_dir, args.out, ntiles)
 
     return args.output
 

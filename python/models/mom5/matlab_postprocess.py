@@ -37,7 +37,7 @@ def matlab_postprocess(base_model_output_dir: Path, matlab_data: Path, output_di
     eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "matlab_tmm" / "Misc")),nargout=0)
     eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "matlab_tmm" / "TMM")),nargout=0)
     eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "Matrix_extraction_code")),nargout=0)
-    eng.GetTransport(str(assembled_transport_output_folder, ntiles), nargout=0) # converts the netcdf output from the model into Matlab Matrix files
+    eng.GetTransport(str(assembled_transport_output_folder), ntiles, nargout=0) # converts the netcdf output from the model into Matlab Matrix files
     eng.get_transport_matrix_all(str(assembled_transport_output_folder), nargout=0) # combines the many individual tile matrices into a single matrix for each month
     eng.test_TMs_ann_filter(str(matlab_data), str(assembled_transport_output_folder), nargout=0) # test the matrices for stability
     eng.make_input_files_for_periodic_mom(str(assembled_transport_output_folder), str(matlab_data), '/scratch/v45/tm8938/projects/easytmm/sst_access_om2.nc', nargout=0) # output transport matrices as petsc files
