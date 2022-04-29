@@ -37,7 +37,7 @@ def combine_tracer_input(outdir: Path, nx: int, ny: int, nz: int, ntiles: int):
         to[:] = 1. 
 
         for j in range(1,nz+1):
-            file_in = "{}/set_combine_tracer_input{:02d}/ptr_{:02d}.nc".format(str(outdir), i, j)
+            file_in = "{}/set_{:02d}/ptr_{:02d}.nc".format(str(outdir), i, j)
             var_in = 'ptr_%02d' % j
             fin = nc.Dataset(file_in, 'r')
             var = fin.variables[var_in][:]
