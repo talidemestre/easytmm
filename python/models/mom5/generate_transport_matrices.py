@@ -30,8 +30,6 @@ runlog: False
     print (temp_run_output)
     highest_output = os.popen('ls ' + str(output_dir) + " | grep '^output[0-9]\+$' |  sort -n | tail -n1").read()[:-1]
     highest_restart = os.popen('ls ' + str(output_dir) + " | grep '^restart[0-9]\+$' |  sort -n | tail -n1").read()[:-1]
-    highest_output = "output050"   #TODO: not this
-    highest_restart = "restart050" #TODO: not this
 
     parent_run_dir = (scratchdir / "run_dirs")
     parent_run_dir.mkdir(exist_ok=True)

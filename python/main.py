@@ -27,7 +27,7 @@ def setup():
 
 def main(args: Namespace):  
     # check for output directory, fail if already exists
-    # args.output.mkdir(parents=False, exist_ok=False)
+    args.output.mkdir(parents=False, exist_ok=False)
 
 
     # establish a temp directory
@@ -49,7 +49,7 @@ def main(args: Namespace):
 
 def teardown(args: Namespace):
     print("stubbing teardown")
-    # os.system('rm -rf ' + str(args.output))
+    os.system('rm -rf ' + str(tempdir))
 
 
 args = setup()
