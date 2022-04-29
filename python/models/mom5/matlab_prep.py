@@ -46,5 +46,5 @@ def clear_current(workdir: Path, outdir: Path):
     # os.system('find ' + str(outdir) + ' -name "*.mat" -exec ln -sf {} . \;') #TODO what is this?
 
 def makeIni(workdir: Path, matlab_outdir: Path, model_base_dir : Path, eng):
-    highest_restart = os.popen('ls ' + str(model_base_dir) + " | grep '^restart[0-9]\+$' |  sort -n | tail -n1").read()[:-1] # TODO: duped functionality
-    eng.MakeIni(str(Path(__file__).parent /"matlab_scripts"/'matlab_tmm'), str(matlab_outdir), str(model_base_dir / highest_restart / "ocean" /"ocean_age_res.nc"), nargout=0)
+    highest_restart = os.popen('ls ' + str(model_base_dir) + " | grep '^restart[0-9]\+$' |  sort -n | tail -n1").read()[:-1] 
+    eng.MakeIni(str(Path(__file__).parent /"matlab_scripts"/'matlab_tmm'), str(matlab_outdir), str(model_base_dir / highest_restart / "ocean" /"ocean_age.res.nc"), nargout=0)

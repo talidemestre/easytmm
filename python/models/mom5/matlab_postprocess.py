@@ -23,7 +23,7 @@ def matlab_postprocess(base_model_out: Path, ntiles: int):
         current_tile = "{}_{:02d}".format(name,i)
         current_output_tile = root / current_tile
 
-        highest_output = os.popen('ls ' + str(current_output_tile) + " | grep '^output[0-9]\+$' |  sort -n | tail -n1").read()[:-1] # TODO: duped functionality
+        highest_output = os.popen('ls ' + str(current_output_tile) + " | grep '^output[0-9]\+$' |  sort -n | tail -n1").read()[:-1]
 
 
         assembled_file = assembled_transport_output_folder / "transport_{:02d}.nc".format(i)

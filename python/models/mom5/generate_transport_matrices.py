@@ -50,16 +50,16 @@ runlog: False
         subprocess.call("cp {} {}".format(str(scratchdir / "matlab_data" / "tracer_set_{:02d}.nc".format(i)), str(current_output_tile / highest_restart / "ocean")), shell=True)
 
         # remove existing field_table
-        subprocess.call("cp --remove-destination `readlink {}` {}".format( str(current_output_tile / highest_output/ "ocean" / "field_table"), str(current_output_tile / highest_output/ "ocean" / "field_table")), shell=True) #TODO: unduplicate arguments
+        subprocess.call("cp --remove-destination `readlink {0}` {0}".format(str(current_output_tile / highest_output/ "ocean" / "field_table")), shell=True)
 
-        # next block, run directories TODO: better comments
+        # next block, run directories
         current_run_dir = (parent_run_dir / "model_run_{:02d}".format(i))
         
         subprocess.call("cp -sr {} {}".format(str(rundir), str(current_run_dir), i), shell=True)
 
         # write lab and run directory to config file
         config_file = str(current_run_dir / "config.yaml")
-        subprocess.call("cp --remove-destination `readlink {}` {}".format(config_file, config_file), shell=True) #TODO: unduplicate arguments
+        subprocess.call("cp --remove-destination `readlink {0}` {0}".format(config_file, config_file), shell=True)
         f = open(config_file, "a")
         job_name = "etmm_tile_{:02d}".format(i)
         f.write(config_yaml_input.format(scratchdir.parent, current_tile, job_name))
@@ -75,7 +75,7 @@ runlog: False
 
         # overwrite max_tracers in ocean.nml
         ocean_input_nml = str(current_run_dir / "ocean" / "input.nml")
-        subprocess.call("cp --remove-destination `readlink {}` {}".format(ocean_input_nml, ocean_input_nml), shell=True) #TODO: unduplicate arguments
+        subprocess.call("cp --remove-destination `readlink {0}` {0}".format(ocean_input_nml), shell=True)
         temp_file = ''
         f = open(ocean_input_nml, 'r')
         for line in f.readlines():
@@ -96,7 +96,7 @@ runlog: False
       
         # TODO: make period only 1 year always
         # accessom2nml_file = str(current_run_dir / "model_run_{:02d}".format(i) / "accessom2.nml")
-        # subprocess.call("cp --remove-destination `readlink {}` {}".format(accessom2nml_file, accessom2nml_file), shell=True) #TODO: unduplicate arguments
+        # subprocess.call("cp --remove-destination `readlink {0}` {0}".format(accessom2nml_file), shell=True)
 
         # f = open(accessom2nml_file, "a")
         # for line in file:
@@ -104,8 +104,6 @@ runlog: False
         #     changes = line.replace("hardships", "situations")
         #     replacement = replacement + changes + "\n"
         # f.close()
-
-        #TODO: block on qsub jobs https://stackoverflow.com/questions/11525214/wait-for-set-of-qsub-jobs-to-complete 
 
     #Block until jobs are done
     print("Waiting for jobs...")

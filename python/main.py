@@ -41,13 +41,13 @@ def main(args: Namespace):
     try:
         model_map[args.model].preprocess(args, tempdir)
     except KeyError:
-        teardown(args)
+        teardown(args, tempdir)
         raise NotImplementedError("No such model as {}!".format(args.model))
     except Exception as e:
-        teardown(args)
+        teardown(args, tempdir)
         raise e
 
-def teardown(args: Namespace):
+def teardown(args: Namespace, tempdir: Path):
     print("stubbing teardown")
     os.system('rm -rf ' + str(tempdir))
 
