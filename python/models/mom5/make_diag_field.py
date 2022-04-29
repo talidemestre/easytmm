@@ -3,6 +3,7 @@ from pathlib import Path
 import os
 
 def make_diag_field(tempdir: Path, nz: int):
+    '''Generate a diagnostic field for our model run and write it to our temp directory.'''
     diag_file = tempdir / 'diag_table'
 
     f = open(str(diag_file),'r')
@@ -10,7 +11,7 @@ def make_diag_field(tempdir: Path, nz: int):
     f.close()
 
     if diag_file.is_symlink():
-        os.system("cp --remove-destination `readlink {}` {}".format(str(diag_file), str(diag_file)))
+        os.system("cp --remove-destination `readlink {0}` {0}".format(str(diag_file)))
     
     f = open(str(diag_file),'w')
     f.write(header[0])

@@ -6,22 +6,19 @@ import os
 import shutil
 import subprocess
 
-def matlab_postprocess(base_model_out: Path, ntiles: int):
-    # assemble output files into one locations
-    name = base_model_out.stem
-    root = base_model_out.parent
+def matlab_postprocess(base_model_output_dir: Path, matlab_data: Path, output_dir: Path, ntiles: int):
+    '''Given outputs of model, perform postprocessing to generate TMM-driver ready transport matrices.'''
+    name = base_model_output_dir.stem
+    archive = base_model_output_dir.parent
 
-    temp = base_model_out.parent.parent
-    scratch_dir = temp / 'scratch' # TODO: Pass down from above.
-    matlab_data = scratch_dir / "matlab_data"
-
-    assembled_transport_output_folder = root / 'ocean_transport_out'
+    assembled_transport_output_folder = archive / 'ocean_transport_out'
     assembled_transport_output_folder.mkdir(exist_ok=True)
 
+    # Assemle transport files from model runs into one directory for processing.
     print("Assembling transport files...")
     for i in range(1,ntiles+1):
         current_tile = "{}_{:02d}".format(name,i)
-        current_output_tile = root / current_tile
+        current_output_tile = archive / current_tile
 
         highest_output = os.popen('ls ' + str(current_output_tile) + " | grep '^output[0-9]\+$' |  sort -n | tail -n1").read()[:-1]
 
@@ -40,10 +37,11 @@ def matlab_postprocess(base_model_out: Path, ntiles: int):
     eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "matlab_tmm" / "Misc")),nargout=0)
     eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "matlab_tmm" / "TMM")),nargout=0)
     eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "Matrix_extraction_code")),nargout=0)
-    eng.GetTransport(str(assembled_transport_output_folder), nargout=0)
-    eng.get_transport_matrix_all(str(assembled_transport_output_folder), nargout=0)
-    eng.test_TMs_ann_filter(str(matlab_data), str(assembled_transport_output_folder), nargout=0)
-    eng.make_input_files_for_periodic_mom(str(assembled_transport_output_folder), str(scratch_dir / "matlab_data"), '/scratch/v45/tm8938/projects/easytmm/sst_access_om2.nc', nargout=0)
+    eng.GetTransport(str(assembled_transport_output_folder, ntiles), nargout=0) # converts the netcdf output from the model into Matlab Matrix files
+    eng.get_transport_matrix_all(str(assembled_transport_output_folder), nargout=0) # combines the many individual tile matrices into a single matrix for each month
+    eng.test_TMs_ann_filter(str(matlab_data), str(assembled_transport_output_folder), nargout=0) # test the matrices for stability
+    eng.make_input_files_for_periodic_mom(str(assembled_transport_output_folder), str(matlab_data), '/scratch/v45/tm8938/projects/easytmm/sst_access_om2.nc', nargout=0) # output transport matrices as petsc files
 
-    subprocess.check_call('mv [ABN][eid]*_[0-1][0-9] ' + str(temp.parent), shell=True)
-    subprocess.check_call('mv Ndini.petsc ' + str(temp.parent), shell=True)
+    # move output files from working directory to output directory
+    subprocess.check_call('mv [ABN][eid]*_[0-1][0-9] ' + str(output_dir), shell=True)
+    subprocess.check_call('mv Ndini.petsc ' + str(output_dir), shell=True)

@@ -7,7 +7,7 @@ function []=make_input_files_for_periodic_mom(base_path, matlab_file_path, bound
 
 	periodicMatrix=1
 
-	dt=7200; % time step to use
+	dt=7200; % time step to use TODO: read in timestep
 
 	rearrangeProfiles=0 % DON'T CHANGE!!
 	bigMat=0

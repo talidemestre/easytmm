@@ -28,7 +28,7 @@ function []=test_TMs_ann_filter(base_path, matrix_path)
   mean(abs(test4))
 
   % %% Initial value problem
-  % dt=7200; % time step to use for initial value problem
+  % dt=7200; % time step to use for initial value problem TODO: read in timestep
   % % dtMultiple=dt/deltaT;
   % % if dtMultiple~=1
   % %   Aimp=Aimp^dtMultiple;

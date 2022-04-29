@@ -4,8 +4,8 @@ import netCDF4 as nc
 import numpy as np
 
 ## Modified from code written by David K. Hutchinson
-## TODO: Ask Dave for Comments
 def check_levels(tempdir: Path):
+    '''Creates temp_levels.nc file from temp.nc.'''
     f = nc.Dataset((tempdir / 'ht.nc'),'r')
     ht = f.variables['ht'][:]
     f.close()

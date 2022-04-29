@@ -1,4 +1,4 @@
-function []=GetTransport(filedir)
+function []=GetTransport(filedir, ntiles)
 	try
 
 	numExpTend=12;
@@ -16,7 +16,7 @@ function []=GetTransport(filedir)
 	nhv_e=nhh;
 	nhv_i=-1;
 
-	for runId = 1:38;
+	for runId = 1:ntiles;
 
 	depths=tracer_run_data.depths(:,runId);
 	iSet=tracer_run_data.groups(runId);

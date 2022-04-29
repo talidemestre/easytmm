@@ -11,7 +11,9 @@ model_map = {
     "stub" : stub
 }
 
-def setup():
+
+def setup_parser():
+    '''Returns an argument parser with our arguments included.'''
     parser = ArgumentParser(description='Generate transport matrices.')
     parser.add_argument('-s', '--source', metavar='/path/to/model/run', 
                         help='path to original model run outputs', required=True, type=Path)
@@ -26,18 +28,16 @@ def setup():
     return parser.parse_args()
 
 def main(args: Namespace):  
-    # check for output directory, fail if already exists
+    '''Define and set up directories for any implementation.'''
+    # Create the output directory, fail if already exists.
     args.output.mkdir(parents=False, exist_ok=False)
 
 
-    # establish a temp directory
+    # Create a temporary directory inside the output directory.
     tempdir = (args.output / ".temp")
     tempdir.mkdir(parents=False, exist_ok=False)
 
-    print("main")
-    print(str(tempdir))
-
-    # call model preprocess script
+    # Call the implementation for preprocessing the model.
     try:
         model_map[args.model].preprocess(args, tempdir)
     except KeyError:
@@ -48,10 +48,11 @@ def main(args: Namespace):
         raise e
 
 def teardown(args: Namespace, tempdir: Path):
+    '''Deletes the temporary directory after the model output is finished.'''
     print("stubbing teardown")
-    os.system('rm -rf ' + str(tempdir))
+    # os.system('rm -rf ' + str(tempdir))
 
 
-args = setup()
+args = setup_parser()
 main(args)
 teardown(args)

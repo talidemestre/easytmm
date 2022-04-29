@@ -4,8 +4,8 @@ import netCDF4 as nc
 import numpy as np
 
 ## Modified from code written by David K. Hutchinson
-## TODO: Ask Dave for Comments
 def make_vert(tempdir: Path):
+    '''Creates ocean_vert.nc from ocean_hgrid.nc'''
     f = nc.Dataset((tempdir / 'ocean_hgrid.nc'),'r')
     x = f.variables['x'][:]
     y = f.variables['y'][:]

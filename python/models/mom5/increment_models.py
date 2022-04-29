@@ -5,7 +5,8 @@ from time import sleep
 import subprocess
 import os
 
-def generate_transport_matrices(scratchdir: Path, output_dir: Path, rundir: Path, ntiles: int):
+def increment_models(scratchdir: Path, output_dir: Path, rundir: Path, ntiles: int):
+    '''Set up model runs and run for one year to generate next step in transport matrices.'''
     field_table_input = '''
 "tracer_packages","ocean_mod","transport_matrix"
 names = '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50'
@@ -43,15 +44,16 @@ runlog: False
         current_output_tile.mkdir(exist_ok=True)
 
         # Get output and restart directories
-        subprocess.call("cp -sr {} {}".format(str(output_dir / highest_output), str(current_output_tile )), shell=True)
-        subprocess.call("cp -rL {} {}".format(str(output_dir / highest_restart), str(current_output_tile)), shell=True)
+        subprocess.check_call("cp -rL {} {}".format(str(output_dir / highest_output), str(current_output_tile )), shell=True)
+        subprocess.check_call("cp -rL {} {}".format(str(output_dir / highest_restart), str(current_output_tile)), shell=True)
 
         # add tracer set to restart directories
-        subprocess.call("cp {} {}".format(str(scratchdir / "matlab_data" / "tracer_set_{:02d}.nc".format(i)), str(current_output_tile / highest_restart / "ocean")), shell=True)
+        subprocess.check_call("cp {} {}".format(str(scratchdir / "matlab_data" / "tracer_set_{:02d}.nc".format(i)), str(current_output_tile / highest_restart / "ocean")), shell=True)
 
         # remove existing field_table
-        subprocess.call("cp --remove-destination `readlink {0}` {0}".format(str(current_output_tile / highest_output/ "ocean" / "field_table")), shell=True)
-
+        # subprocess.check_call("cp --remove-destination `readlink {0}` {0}".format(str(current_output_tile / highest_output/ "ocean" / "field_table")), shell=True)
+        #TODO: remove above block
+        
         # next block, run directories
         current_run_dir = (parent_run_dir / "model_run_{:02d}".format(i))
         

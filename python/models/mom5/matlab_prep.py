@@ -7,13 +7,17 @@ out_files = ['basis_functions.mat', 'boxes.mat', 'boxnum.mat', 'links.mat', 'mat
 
 
 def matlab_prep(tempdir: Path, model_base_dir: Path ):
+    '''Runs Matlab scripts to create all *.mat files needed before generation of transport matrices.'''
+
+    # define directories for working with Matlab
     matlab_working_dir = Path(os.getcwd())
     matlab_output_dir = tempdir / "matlab_data"
     matlab_output_dir.mkdir(exist_ok=True)
     
-    print(matlab.__file__)
     eng = matlab.engine.start_matlab()
     print('Matlab engine started.')
+
+    # add paths with Matlab code we will execute
     eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts")),nargout=0)
     eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "matlab_tmm" / "gcmfaces")),nargout=0)
     eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "matlab_tmm" / "Misc")),nargout=0)
@@ -30,21 +34,21 @@ def matlab_prep(tempdir: Path, model_base_dir: Path ):
 
 
 def clear_previous(workdir: Path, outdir: Path):
+    '''Deletes files previously completed by running these scripts, possibly in a failed run.'''
     for out_file in out_files:
         (workdir / out_file).unlink(missing_ok=True)
         (outdir / out_file).unlink( missing_ok=True)
 
 def prep_files(tempdir: Path, eng):
-    # run prep_files script
-    eng.prep_files(7200, str(tempdir), nargout=0)
+    '''Run Matlab prep_files function'''
+    eng.prep_files(7200, str(tempdir), nargout=0)  #TODO: read in timestep
 
 def clear_current(workdir: Path, outdir: Path):
-    # clean up matlab
+    '''Move all files created by Matlab in working directory to the matlab output directory.'''
     for out_file in out_files:
         shutil.move((workdir / out_file), (outdir / out_file))
 
-    # os.system('find ' + str(outdir) + ' -name "*.mat" -exec ln -sf {} . \;') #TODO what is this?
-
 def makeIni(workdir: Path, matlab_outdir: Path, model_base_dir : Path, eng):
+    '''Run Matlab MakeIni function'''
     highest_restart = os.popen('ls ' + str(model_base_dir) + " | grep '^restart[0-9]\+$' |  sort -n | tail -n1").read()[:-1] 
     eng.MakeIni(str(Path(__file__).parent /"matlab_scripts"/'matlab_tmm'), str(matlab_outdir), str(model_base_dir / highest_restart / "ocean" /"ocean_age.res.nc"), nargout=0)

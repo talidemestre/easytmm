@@ -7,6 +7,7 @@ import numpy as np
 import os
 
 def combine_tracer_input(outdir: Path, nx: int, ny: int, nz: int, ntiles: int):
+    '''Combines each set of tracers into a tile of tracers for that field.'''
     print("Combining tracer input:")
     for i in tqdm(range(1,ntiles+1)):
         file_tmp = "{}/tracer_set_tmp.nc".format(str(outdir))
@@ -36,7 +37,7 @@ def combine_tracer_input(outdir: Path, nx: int, ny: int, nz: int, ntiles: int):
         to[:] = 1. 
 
         for j in range(1,nz+1):
-            file_in = "{}/set_{:02d}/ptr_{:02d}.nc".format(str(outdir), i, j)
+            file_in = "{}/set_combine_tracer_input{:02d}/ptr_{:02d}.nc".format(str(outdir), i, j)
             var_in = 'ptr_%02d' % j
             fin = nc.Dataset(file_in, 'r')
             var = fin.variables[var_in][:]
