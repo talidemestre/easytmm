@@ -5,9 +5,7 @@ from time import sleep
 import subprocess
 import os
 
-def generate_transport_matrices(scratchdir: Path, output_dir: Path, rundir: Path):
-    ntile = 38
-
+def generate_transport_matrices(scratchdir: Path, output_dir: Path, rundir: Path, ntiles: int):
     field_table_input = '''
 "tracer_packages","ocean_mod","transport_matrix"
 names = '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50'
@@ -41,7 +39,7 @@ runlog: False
     job_list = []
 
     print("setting up model runs:")
-    for i in tqdm(range(1,ntile+1)):
+    for i in tqdm(range(1,ntiles+1)):
         current_tile = "{}_{:02d}".format(name,i)
         current_output_tile = temp_run_output / current_tile
         current_output_tile.mkdir(exist_ok=True)

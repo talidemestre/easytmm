@@ -2,7 +2,7 @@ from pathlib import Path
 
 import os
 
-def make_diag_field(tempdir: Path):
+def make_diag_field(tempdir: Path, nz: int):
     diag_file = tempdir / 'diag_table'
 
     f = open(str(diag_file),'r')
@@ -18,7 +18,7 @@ def make_diag_field(tempdir: Path):
     f.write('"ocean_transport",      1,  "months", 1, "days", "time",\n\n')
 
 
-    for i in range(1,51): # TODO: pass in depth, nz+1
+    for i in range(1,nz+1):
         l1 = '"transport_matrix","exp_tm_%02d","exp_tm_%02d" ,"ocean_transport","all",.true.,"none",1\n' % (i,i)
         l2 = '"transport_matrix","imp_tm_%02d","imp_tm_%02d" ,"ocean_transport","all",.true.,"none",1\n' % (i,i)
         f.write(l1)

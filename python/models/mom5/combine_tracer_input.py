@@ -6,17 +6,12 @@ import numpy as np
 
 import os
 
-def combine_tracer_input(outdir: Path):
-    ntile = 38 ## read in from tracer tiles
-    nz = 50
-    ny = 300
-    nx = 360 ## TODO: Pass in / read in readin
-
+def combine_tracer_input(outdir: Path, nx: int, ny: int, nz: int, ntiles: int):
     print("Combining tracer input:")
-    for i in tqdm(range(1,ntile+1)):
+    for i in tqdm(range(1,ntiles+1)):
         file_tmp = "{}/tracer_set_tmp.nc".format(str(outdir))
         file_out = "{}/tracer_set_{:02d}.nc".format(str(outdir), i)
-        fo = nc.Dataset(file_tmp, 'w') ## TODO: This gets a permission denied, probably dont have write permissions to the set directory for whatever reason.
+        fo = nc.Dataset(file_tmp, 'w')
         fo.history = 'combine_tracer_input.py on set %02d \n' % i
 
         fo.createDimension('xaxis_1', nx)

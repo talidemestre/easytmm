@@ -8,7 +8,6 @@ function []=make_grid_mom5(deltaT, rundir)
    depthFile=fullfile(rundir,'ht.nc');
    levelFile=fullfile(rundir,'temp_levels.nc');
    dzFile=fullfile(rundir,'dzt.nc');
-   % addpath('/Users/davidhutchinson/Dropbox/UNSW/data/MatrixExtractionCode/spk');
 
    x=ncread(depthFile,'xt_ocean'); % nominal longitude
    y=ncread(depthFile,'yt_ocean'); % nominal latitude

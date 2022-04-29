@@ -6,7 +6,7 @@ import shutil
 out_files = ['basis_functions.mat', 'boxes.mat', 'boxnum.mat', 'links.mat', 'matrix_extraction_run_data.mat', 'tracer_tiles.mat', 'grid.mat']
 
 
-def matlab_prep(tempdir: Path):
+def matlab_prep(tempdir: Path, model_base_dir: Path ):
     matlab_working_dir = Path(os.getcwd())
     matlab_output_dir = tempdir / "matlab_data"
     matlab_output_dir.mkdir(exist_ok=True)
@@ -24,7 +24,7 @@ def matlab_prep(tempdir: Path):
     clear_previous(matlab_working_dir, matlab_output_dir)
     prep_files(tempdir, eng)
     clear_current(matlab_working_dir, matlab_output_dir)
-    makeIni(matlab_working_dir, matlab_output_dir, eng)
+    makeIni(matlab_working_dir, matlab_output_dir, model_base_dir, eng)
 
     return matlab_output_dir
 
@@ -45,5 +45,6 @@ def clear_current(workdir: Path, outdir: Path):
 
     # os.system('find ' + str(outdir) + ' -name "*.mat" -exec ln -sf {} . \;') #TODO what is this?
 
-def makeIni(workdir: Path, outdir: Path, eng):
-    eng.MakeIni(os.getcwd() + '/python/models/mom5/matlab_scripts/matlab_tmm', str(outdir), '/g/data/e14/rmh561/access-om2/archive/1deg_jra55_ryf_red3DSK_C9/restart100/ocean/ocean_age.res.nc', nargout=0) # TODO: Dont hardcode this, pass in from highest restart directory?
+def makeIni(workdir: Path, matlab_outdir: Path, model_base_dir : Path, eng):
+    highest_restart = os.popen('ls ' + str(model_base_dir) + " | grep '^restart[0-9]\+$' |  sort -n | tail -n1").read()[:-1] # TODO: duped functionality
+    eng.MakeIni(str(Path(__file__).parent /"matlab_scripts"/'matlab_tmm'), str(matlab_outdir), str(model_base_dir / highest_restart / "ocean" /"ocean_age_res.nc"), nargout=0)

@@ -1,6 +1,11 @@
 #PBS -l storage=gdata/hh5+gdata/v45+scratch/v45
-#PBS -l mem=16GB
+#PBS -l mem=21GB
 source /scratch/v45/tm8938/projects/easytmm/venv/bin/activate
+
+echo $PWD
+cd /scratch/v45/tm8938/projects/easytmm/
+echo $PWD
+
 
 module load matlab/R2021b
 module load matlab_licence/anu

@@ -3,6 +3,8 @@ from pathlib import Path
 import subprocess
 import os
 
+from scipy.io import loadmat
+
 from .check_levels import check_levels
 from .make_vert import make_vert
 from .matlab_prep import matlab_prep
@@ -11,6 +13,7 @@ from .combine_tracer_input import combine_tracer_input
 from .make_diag_field import make_diag_field
 from .generate_transport_matrices import generate_transport_matrices
 from .matlab_postprocess import matlab_postprocess
+
 
 def preprocess(args: Namespace, tempdir: Path): 
     try:
@@ -29,7 +32,6 @@ def preprocess(args: Namespace, tempdir: Path):
     output_dir.mkdir(parents=True)
     subprocess.check_call('ln  -s ' + str(args.source) + '/* ' + str(output_dir), shell=True) # TODO, find a better war to do this
 
-
     # get latest run and softlink files to a scratch directory
     scratch_dir = tempdir / 'scratch'
     scratch_dir.mkdir()
@@ -44,9 +46,22 @@ def preprocess(args: Namespace, tempdir: Path):
     process_ocean_nc_files(scratch_dir) #extract additional nc files
     check_levels(scratch_dir) # create temp_levels.nc
     make_vert(scratch_dir) # create ocean_vert.nc
-    matlab_output_dir = matlab_prep(scratch_dir) # matlab creates preprocessing files
-    combine_tracer_input(matlab_output_dir) # combine preprocessing inputs
-    make_diag_field(scratch_dir) # add diagnostics to tracer filetempdir    
+    matlab_output_dir = matlab_prep(scratch_dir, output_dir) # matlab creates preprocessing files
+
+    # extract model dimensions for processing
     
-    generate_transport_matrices(scratch_dir, output_dir, args.run_directory)
-    matlab_postprocess(output_dir)
+    grid = loadmat(str(matlab_output_dir / 'grid.mat'))
+    nx = grid['nx'][0][0]
+    ny = grid['ny'][0][0]
+    nz = grid['nz'][0][0]
+
+    tracer_tiles = loadmat(str(matlab_output_dir / 'tracer_tiles.mat'))
+    ntiles = tracer_tiles['numGroups'][0][0]
+
+    combine_tracer_input(matlab_output_dir, nx, ny, nz, ntiles) # combine preprocessing inputs
+    make_diag_field(scratch_dir, nz) # add diagnostics to tracer filetempdir    
+    
+    generate_transport_matrices(scratch_dir, output_dir, args.run_directory, ntiles)
+    matlab_postprocess(output_dir, ntiles)
+
+
