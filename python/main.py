@@ -21,10 +21,14 @@ def setup_parser():
                         help='path to original model run inputs', required=False, type=Path)
     parser.add_argument('-r', '--run_directory', metavar='/path/to/original/run/directory',
                         help='path to original model run directory', required=False, type=Path)
+    parser.add_argument('-c', '--initial_conditions', metavar='/path/to/initial/tracer/conditions',
+                        help='path to initial conditions', required=True, type=Path)
+    parser.add_argument('-t', '--timestep', metavar='integer timestep (s)',
+                        help='base timestep of model run', required=True, type=int)
     parser.add_argument('-o', '--output', metavar='/path/to/matrix/output', 
-                    help='path to output matrices', default=str(Path(__file__).parent.parent / "matrix_output"), type=Path)
+                        help='path to output matrices', default=str(Path(__file__).parent.parent / "matrix_output"), type=Path)
     parser.add_argument('-m', '--model', metavar='"Model Type"', 
-                    help='input model type: mom5, stub', default="mom5")
+                        help='input model type: mom5, stub', default="mom5")
     return parser.parse_args()
 
 def main(args: Namespace):  

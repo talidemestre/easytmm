@@ -11,4 +11,4 @@ echo $PWD
 module load matlab/R2021b
 module load matlab_licence/anu
 
-python3 /scratch/v45/tm8938/projects/easytmm/python/main.py -s /scratch/v45/tm8938/projects/easytmm_srcs/1deg_jra55_ryf_red3DSK_C9 -i /g/data/ik11/inputs/access-om2/input_20200530/mom_1deg --run_directory /scratch/v45/tm8938/projects/easytmm_srcs/1deg_jra55_ryf -m mom5 -o alternative_matrix_output_4
+python3 /scratch/v45/tm8938/projects/easytmm/python/main.py -s /scratch/v45/tm8938/projects/easytmm_srcs/1deg_jra55_ryf_red3DSK_C9 -i /g/data/ik11/inputs/access-om2/input_20200530/mom_1deg --run_directory /scratch/v45/tm8938/projects/easytmm_srcs/1deg_jra55_ryf -m mom5 -c /scratch/v45/tm8938/projects/easytmm/sst_access_om2.nc -t 5400 -o alternative_matrix_output_4

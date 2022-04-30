@@ -11,6 +11,8 @@ output_dir = tempdir / 'archive' / '1deg_jra55_ryf_red3DSK_C9'
 
 matlab_dir = tempdir / 'scratch' /'matlab_data'
 
+initial_c = pathlib.Path("/scratch/v45/tm8938/projects/easytmm/sst_access_om2.nc")
+
 f = loadmat(str(matlab_dir / 'grid.mat'))
 print(f.keys())
 print(f['deltaT'][0][0])
@@ -27,5 +29,5 @@ print(type(int(ntile)))
 
 # increment_models(scratchdir, output_dir, rundir, ntile)
 # matlab_output_dir = matlab_prep(tempdir / 'scratch', output_dir)
-matlab_postprocess(output_dir, matlab_dir, tempdir.parent, ntile, 5400)
+matlab_postprocess(output_dir, matlab_dir, tempdir.parent, initial_c, ntile, 5400)
 # generate_transport_matrices(tempdir, output_dir, rundir)

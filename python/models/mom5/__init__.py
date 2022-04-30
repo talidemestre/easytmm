@@ -50,11 +50,10 @@ def preprocess(args: Namespace, tempdir: Path):
     make_vert(scratch_dir) # create ocean_vert.nc
 
     # create .mat files used in transport pointer generation
-    matlab_output_dir = matlab_prep(scratch_dir, output_dir, 5400)
-    
+    matlab_output_dir = matlab_prep(scratch_dir, output_dir, args.timestep)
+
     # extract model dimensions for processing    
     grid = loadmat(str(matlab_output_dir / 'grid.mat'))
-    deltaT = grid['deltaT'][0][0]
     nx = grid['nx'][0][0]
     ny = grid['ny'][0][0]
     nz = grid['nz'][0][0]
@@ -67,7 +66,7 @@ def preprocess(args: Namespace, tempdir: Path):
     
     # generate transport matrices and output in petsc format
     increment_models(scratch_dir, output_dir, args.run_directory, ntiles)
-    matlab_postprocess(output_dir, matlab_output_dir, args.output, ntiles, deltaT)
+    matlab_postprocess(output_dir, matlab_output_dir, args.output, args.initial_conditions, ntiles, args.timestep)
 
     return args.output
 
