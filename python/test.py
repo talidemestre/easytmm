@@ -22,10 +22,10 @@ print(f['nz'][0][0])
 f = loadmat(str(matlab_dir / 'tracer_tiles.mat'))
 print(f.keys())
 ntile = f['numGroups'][0][0]
-
+print(type(int(ntile)))
 # combine_tracer_input(tempdir/"matlab_data")
 
 # increment_models(scratchdir, output_dir, rundir, ntile)
 # matlab_output_dir = matlab_prep(tempdir / 'scratch', output_dir)
-# matlab_postprocess(output_dir, matlab_dir, tempdir.parent, ntile)
+matlab_postprocess(output_dir, matlab_dir, tempdir.parent, ntile, 5400)
 # generate_transport_matrices(tempdir, output_dir, rundir)

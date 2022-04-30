@@ -25,7 +25,7 @@ def matlab_postprocess(base_model_output_dir: Path, matlab_data: Path, output_di
 
         assembled_file = assembled_transport_output_folder / "transport_{:02d}.nc".format(i)
         
-        assembled_file.symlink_to(current_output_tile / highest_output / "ocean" / "ocean_transport.nc")
+        assembled_file.symlink_to(current_output_tile / highest_output / "ocean" / "ocean_transport.nc") #TODO: dont do this if the model failed
 
 
     print("Running matlab postprocess scripts...")
@@ -37,10 +37,10 @@ def matlab_postprocess(base_model_output_dir: Path, matlab_data: Path, output_di
     eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "matlab_tmm" / "Misc")),nargout=0)
     eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "matlab_tmm" / "TMM")),nargout=0)
     eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "Matrix_extraction_code")),nargout=0)
-    eng.GetTransport(str(assembled_transport_output_folder), ntiles, nargout=0) # converts the netcdf output from the model into Matlab Matrix files
+    eng.GetTransport(str(assembled_transport_output_folder), int(ntiles), nargout=0) # converts the netcdf output from the model into Matlab Matrix files
     eng.get_transport_matrix_all(str(assembled_transport_output_folder), nargout=0) # combines the many individual tile matrices into a single matrix for each month
-    eng.test_TMs_ann_filter(str(matlab_data), str(assembled_transport_output_folder), deltaT, nargout=0) # test the matrices for stability
-    eng.make_input_files_for_periodic_mom(str(assembled_transport_output_folder), str(matlab_data), '/scratch/v45/tm8938/projects/easytmm/sst_access_om2.nc', deltaT, nargout=0) # output transport matrices as petsc files
+    eng.test_TMs_ann_filter(str(matlab_data), str(assembled_transport_output_folder), int(deltaT), nargout=0) # test the matrices for stability
+    eng.make_input_files_for_periodic_mom(str(assembled_transport_output_folder), str(matlab_data), '/scratch/v45/tm8938/projects/easytmm/sst_access_om2.nc', int(deltaT), nargout=0) # output transport matrices as petsc files
 
     # move output files from working directory to output directory
     subprocess.check_call('mv [ABN][eid]*_[0-1][0-9] ' + str(output_dir), shell=True)

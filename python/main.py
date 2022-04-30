@@ -34,7 +34,7 @@ def main(args: Namespace):
 
 
     # Create a temporary directory inside the output directory.
-    tempdir = (args.output / ".temp")
+    tempdir = (args.output / ".temp").resolve()
     tempdir.mkdir(parents=False, exist_ok=False)
 
     # Call the implementation for preprocessing the model.
@@ -47,6 +47,8 @@ def main(args: Namespace):
         teardown(args, tempdir)
         raise e
 
+    return tempdir
+
 def teardown(args: Namespace, tempdir: Path):
     '''Deletes the temporary directory after the model output is finished.'''
     print("stubbing teardown")
@@ -54,5 +56,5 @@ def teardown(args: Namespace, tempdir: Path):
 
 
 args = setup_parser()
-main(args)
-teardown(args)
+tempdir = main(args)
+teardown(args, tempdir)
