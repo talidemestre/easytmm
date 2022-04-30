@@ -3,11 +3,9 @@
 % % base_path='/data2/spk/TransportMatrixConfigs/MITgcm_2.8deg';
 
 % addpath(genpath('/scratch/v45/dkh157/matlab'));
-function []=make_input_files_for_periodic_mom(base_path, matlab_file_path, boundary_condition_file)
+function []=make_input_files_for_periodic_mom(base_path, matlab_file_path, boundary_condition_file, dt)
 
 	periodicMatrix=1
-
-	dt=7200; % time step to use TODO: read in timestep
 
 	rearrangeProfiles=0 % DON'T CHANGE!!
 	bigMat=0

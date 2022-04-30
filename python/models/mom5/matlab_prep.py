@@ -6,7 +6,7 @@ import shutil
 out_files = ['basis_functions.mat', 'boxes.mat', 'boxnum.mat', 'links.mat', 'matrix_extraction_run_data.mat', 'tracer_tiles.mat', 'grid.mat']
 
 
-def matlab_prep(tempdir: Path, model_base_dir: Path ):
+def matlab_prep(tempdir: Path, model_base_dir: Path, deltaT: int ):
     '''Runs Matlab scripts to create all *.mat files needed before generation of transport matrices.'''
 
     # define directories for working with Matlab
@@ -26,7 +26,7 @@ def matlab_prep(tempdir: Path, model_base_dir: Path ):
     eng.addpath("{}".format(str(matlab_output_dir) ))
 
     clear_previous(matlab_working_dir, matlab_output_dir)
-    prep_files(tempdir, eng)
+    prep_files(tempdir, deltaT, eng)
     clear_current(matlab_working_dir, matlab_output_dir)
     makeIni(matlab_working_dir, matlab_output_dir, model_base_dir, eng)
 
@@ -39,9 +39,9 @@ def clear_previous(workdir: Path, outdir: Path):
         (workdir / out_file).unlink(missing_ok=True)
         (outdir / out_file).unlink( missing_ok=True)
 
-def prep_files(tempdir: Path, eng):
+def prep_files(tempdir: Path, deltaT: int, eng):
     '''Run Matlab prep_files function'''
-    eng.prep_files(7200, str(tempdir), nargout=0)  #TODO: read in timestep
+    eng.prep_files(deltaT, str(tempdir), nargout=0)  #TODO: read in timestep
 
 def clear_current(workdir: Path, outdir: Path):
     '''Move all files created by Matlab in working directory to the matlab output directory.'''

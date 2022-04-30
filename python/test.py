@@ -13,6 +13,8 @@ matlab_dir = tempdir / 'scratch' /'matlab_data'
 
 f = loadmat(str(matlab_dir / 'grid.mat'))
 print(f.keys())
+print(f['deltaT'][0][0])
+
 print(f['nx'][0][0])
 print(f['ny'][0][0])
 print(f['nz'][0][0])
@@ -23,7 +25,7 @@ ntile = f['numGroups'][0][0]
 
 # combine_tracer_input(tempdir/"matlab_data")
 
-increment_models(scratchdir, output_dir, rundir, ntile)
+# increment_models(scratchdir, output_dir, rundir, ntile)
 # matlab_output_dir = matlab_prep(tempdir / 'scratch', output_dir)
-matlab_postprocess(output_dir, matlab_dir, tempdir.parent, ntile)
+# matlab_postprocess(output_dir, matlab_dir, tempdir.parent, ntile)
 # generate_transport_matrices(tempdir, output_dir, rundir)

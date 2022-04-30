@@ -49,11 +49,9 @@ def preprocess(args: Namespace, tempdir: Path):
     check_levels(scratch_dir) # create temp_levels.nc
     make_vert(scratch_dir) # create ocean_vert.nc
 
-    # create .mat files used in transport pointer generation
-    matlab_output_dir = matlab_prep(scratch_dir, output_dir)
-
     # extract model dimensions for processing    
     grid = loadmat(str(matlab_output_dir / 'grid.mat'))
+    deltaT = grid['deltaT'][0][0]
     nx = grid['nx'][0][0]
     ny = grid['ny'][0][0]
     nz = grid['nz'][0][0]
@@ -61,11 +59,15 @@ def preprocess(args: Namespace, tempdir: Path):
     tracer_tiles = loadmat(str(matlab_output_dir / 'tracer_tiles.mat'))
     ntiles = tracer_tiles['numGroups'][0][0]
 
+    # create .mat files used in transport pointer generation
+    matlab_output_dir = matlab_prep(scratch_dir, output_dir, deltaT)
+
     combine_tracer_input(matlab_output_dir, nx, ny, nz, ntiles) # combine preprocessing inputs
     make_diag_field(scratch_dir, nz) # add diagnostics to tracer filetempdir    
     
     # generate transport matrices and output in petsc format
     increment_models(scratch_dir, output_dir, args.run_directory, ntiles)
+    matlab_postprocess(output_dir, matlab_output_dir, args.out, ntiles, deltaT)
 
     return args.output
 

@@ -92,7 +92,7 @@ runlog: False
       
         # TODO: make period only 1 year always
         # accessom2nml_file = str(current_run_dir / "model_run_{:02d}".format(i) / "accessom2.nml")
-        # subprocess.call("cp --remove-destination `readlink {0}` {0}".format(accessom2nml_file), shell=True)
+        # subprocess.check_call("cp --remove-destination `readlink {0}` {0}".format(accessom2nml_file), shell=True)
 
         # f = open(accessom2nml_file, "a")
         # for line in file:
