@@ -3,7 +3,7 @@ import pathlib
 import os
 from scipy.io import loadmat
 
-tempdir = pathlib.Path('/scratch/v45/tm8938/projects/easytmm/alternative_matrix_output_2/.temp')
+tempdir = pathlib.Path('/scratch/v45/tm8938/projects/easytmm/alternative_matrix_output_4/.temp')
 rundir = pathlib.Path('/scratch/v45/tm8938/projects/easytmm_srcs/1deg_jra55_ryf')
 
 scratchdir = tempdir / 'scratch'

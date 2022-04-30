@@ -86,7 +86,7 @@ function []=make_input_files_for_periodic_mom(base_path, matlab_file_path, bound
 			Aexp=Aexp(Ir_pre,Ir_pre); % rearrange
 		end
 		% make discrete
-		Aexp=dt*Aexp;
+		Aexp=double(dt)*Aexp;
 		Aexp=I+Aexp;
 		[Ae1,Be,Ii]=split_transport_matrix(Aexp,Ib);
 		writePetscBin(['Ae1_' sprintf('%02d',im-1)],Ae1,[],1)
