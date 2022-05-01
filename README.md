@@ -67,6 +67,7 @@ python3 /scratch/v45/tm8938/projects/easytmm/python/main.py -s /scratch/v45/tm89
 ## Using the Transport Matrices
 Here is an example of how to use the transport matrices once they have been created.
 
+The following code block will build the `tmm` driver and put it in your output directory.
 ```
 $ cd ~
 $ git clone https://github.com/samarkhatiwala/tmm
@@ -75,8 +76,6 @@ $ export TMMROOT=$PWD
 $ cd driver/current
 $ make
 $ cp tmm <matrix output directory>
-$ cd <matrix output directory>
-$ qsub run.sh
 ```
 
 You will need a `run.sh` file, which may look something like this:
@@ -113,4 +112,11 @@ mpiexec -np 48 ./tmm -numtracers 1 \
   -avg_files Tracer_avg.petsc \
   -bcavg_files Tracer_bc_avg.petsc \
   > log
+```
+
+You can then submit this as a job.
+
+```
+$ cd <matrix output directory>
+$ qsub run.sh
 ```
