@@ -40,5 +40,5 @@ def matlab_postprocess(base_model_output_dir: Path, matlab_data: Path, output_di
     eng.make_input_files_for_periodic_mom(str(assembled_transport_output_folder), str(matlab_data), str(initial_conditions_path), deltaT, nargout=0) # output transport matrices as petsc files
 
     # move output files from working directory to output directory
-    subprocess.check_call('mv [ABN][eid]*_[0-1][0-9] ' + str(output_dir), shell=True)
-    subprocess.check_call('mv Ndini.petsc ' + str(output_dir), shell=True)
+    subprocess.check_call('mv [ABT][reid]*_[0-1][0-9] ' + str(output_dir), shell=True)
+    subprocess.check_call('mv Tracer_ini.petsc ' + str(output_dir), shell=True)

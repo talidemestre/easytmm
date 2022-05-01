@@ -51,19 +51,19 @@ function []=make_input_files_for_periodic_mom(base_path, matlab_file_path, bound
 
 	numTracers=1;
 
-	nd_in = ncread(boundary_condition_file,'temp');
-	nd_in = reshape(nd_in, nx, ny, nz, 1);
-	nd_in = repmat(nd_in, [1,1,1,12]);
+	tracer_in = ncread(boundary_condition_file,'temp');
+	tracer_in = reshape(tracer_in, nx, ny, nz, 1);
+	tracer_in = repmat(tracer_in, [1,1,1,12]);
 
-	Nd_steady = gridToMatrix(nd_in,[],boxFile,gridFile);
+	Tracer_steady = gridToMatrix(tracer_in,[],boxFile,gridFile);
 
-	clear Nd_dist; 
+	clear Tracer_dist; 
 
 	% Boundary conditions
-	Cbc{1}=Nd_steady(Ib,:);
+	Cbc{1}=Tracer_steady(Ib,:);
 
 	% Initial condition
-	Cini{1}=Nd_steady(Ii,1);
+	Cini{1}=Tracer_steady(Ii,1);
 
 	if rearrangeProfiles
 	error('ERROR: rearrangeProfiles must be set to 0!')
@@ -120,12 +120,12 @@ function []=make_input_files_for_periodic_mom(base_path, matlab_file_path, bound
 	end
 	% Initial conditions  
 	for itr=1:numTracers
-		writePetscBin('Ndini.petsc',Cini{itr})
+		writePetscBin('Tracer_ini.petsc',Cini{itr})
 	end
 	% Boundary conditions
 	for itr=1:numTracers
 		for im=1:12
-		writePetscBin(['Ndbc_' sprintf('%02d',im-1)],Cbc{itr}(:,im))
+		writePetscBin(['Tracer_bc_' sprintf('%02d',im-1)],Cbc{itr}(:,im))
 		end    
 	end
 	

@@ -56,7 +56,7 @@ def main(args: Namespace):
 def teardown(args: Namespace, tempdir: Path):
     '''Deletes the temporary directory after the model output is finished.'''
     print("stubbing teardown")
-    # os.system('rm -rf ' + str(tempdir))
+    os.system('rm -rf ' + str(tempdir))
 
 
 args = setup_parser()
