@@ -16,7 +16,7 @@ $ python3 -m venv /path/to/new/virtual/environment
 
 Instead, I had to copy Matlab to a local directory, and then install the engine from that directroy.
 ```
-$ cp /apps/matlab/R2021b matlab_install
+$ cp -r /apps/matlab/R2021b matlab_install
 $ cd matlab_install/R2021b/extern/engines/python/setup.py
 $ python setup.py install
 ```
@@ -65,58 +65,17 @@ module load matlab_licence/anu
 python3 /scratch/v45/tm8938/projects/easytmm/python/main.py -s /scratch/v45/tm8938/projects/easytmm_srcs/1deg_jra55_ryf_red3DSK_C9 -i /g/data/ik11/inputs/access-om2/input_20200530/mom_1deg --run_directory /scratch/v45/tm8938/projects/easytmm_srcs/1deg_jra55_ryf -m mom5 -c /scratch/v45/tm8938/projects/easytmm/sst_access_om2.nc -t 5400
 ```
 ## Using the Transport Matrices
-Here is an example of how to use the transport matrices once they have been created.
+Here is an example of how to use the transport matrices once they have been created. This example uses a driver precompiled for use on the _NCI_.
 
-The following code block will build the `tmm` driver and put it in your output directory.
-```
-$ cd ~
-$ git clone https://github.com/samarkhatiwala/tmm
-$ cd tmm 
-$ export TMMROOT=$PWD
-$ cd driver/current
-$ make
-$ cp tmm <matrix output directory>
-```
-
-You will need a `run.sh` file, which may look something like this:
-```bash
-#!/bin/bash
-#PBS -P v45
-#PBS -N tmm_test
-#PBS -q normal
-#PBS -l walltime=01:00:00
-#PBS -l ncpus=48
-#PBS -l mem=192GB
-#PBS -l software=matlab_anu
-#PBS -l storage=gdata/hh5+scratch/v45
-#PBS -l wd
-#PBS -j oe
-
-
-### Run model 
-mpiexec -np 48 ./tmm -numtracers 1 \
-  -i Tracer_ini.petsc \
-  -max_steps 16200 \
-  -write_time_steps 16200 \
-  -me \
-  -mi  \
-  -o Tracer.petsc \
-  -obc Tracer_bc_out.petsc \
-  -periodic_matrix \
-  -matrix_cycle_period 1.0 -matrix_num_per_period 12 -matrix_periodic_times_file periodic_times_365d.bin \
-  -prescribed_bc \
-  -bc_files Tracer_bc \
-  -periodic_bc \
-  -bc_cycle_period 1.0 -bc_num_per_period 12 -bc_periodic_times_file periodic_times_365d.bin \
-  -time_avg -avg_start_time_step 1 -avg_time_steps 2190 \
-  -avg_files Tracer_avg.petsc \
-  -bcavg_files Tracer_bc_avg.petsc \
-  > log
-```
-
-You can then submit this as a job.
+Navigate to the output directory, and copy the necessary sources.
 
 ```
-$ cd <matrix output directory>
-$ qsub run.sh
+$ cd matrix_output
+$ cp ../tmm/* .
+```
+
+Open the `run_example.sh` file and ensure the configuration matches the details of your model.
+
+```
+$ qsub run_example.sh
 ```
