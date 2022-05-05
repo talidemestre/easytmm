@@ -42,3 +42,4 @@ def matlab_postprocess(base_model_output_dir: Path, matlab_data: Path, output_di
     # move output files from working directory to output directory
     subprocess.check_call('mv [ABT][reid]*_[0-1][0-9] ' + str(output_dir), shell=True)
     subprocess.check_call('mv Tracer_ini.petsc ' + str(output_dir), shell=True)
+    subprocess.check_call('mv {0}/grid.mat {0}/boxes.mat {1}'.format(str(matlab_data), str(output_dir)), shell=True)
