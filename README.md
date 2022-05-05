@@ -20,6 +20,7 @@ $ cp -r /apps/matlab/R2021b matlab_install
 $ cd matlab_install/R2021b/extern/engines/python/setup.py
 $ python setup.py install
 ```
+Note that it may take a long time for Matlab to copy.
 ### 4. Install Other Requirements
 ```
 $ pip install -r requirements.txt
@@ -51,18 +52,16 @@ You may wish to submit the job via a script similar to:
 ```bash
 #PBS -l storage=gdata/hh5+gdata/v45+scratch/v45+gdata/e14+gdata/ik11
 #PBS -l mem=32GB
-#PBS -N runscript_alt_7
+#PBS -N easytmm
 
-source /scratch/v45/tm8938/projects/easytmm/venv/bin/activate
+cd <repository directory>
 
-echo $PWD
-cd /scratch/v45/tm8938/projects/easytmm/
-echo $PWD
+source ./venv/bin/activate
 
 module load matlab/R2021b
-module load matlab_licence/anu
+module load matlab_licence/<institution>
 
-python3 /scratch/v45/tm8938/projects/easytmm/python/main.py -s /scratch/v45/tm8938/projects/easytmm_srcs/1deg_jra55_ryf_red3DSK_C9 -i /g/data/ik11/inputs/access-om2/input_20200530/mom_1deg --run_directory /scratch/v45/tm8938/projects/easytmm_srcs/1deg_jra55_ryf -m mom5 -c /scratch/v45/tm8938/projects/easytmm/sst_access_om2.nc -t 5400
+python3 ./python/main.py -s <source output> -i <source input> --run_directory <initial run directory> -m om2 -c <boundary conidtions> -t <default timestep>
 ```
 ## Using the Transport Matrices
 Here is an example of how to use the transport matrices once they have been created. This example uses a driver precompiled for use on the _NCI_.
@@ -71,7 +70,7 @@ Navigate to the output directory, and copy the necessary sources.
 
 ```
 $ cd matrix_output
-$ cp ../tmm/* .
+$ cp ../tmm/* . -r
 ```
 
 Open the `run_example.sh` file and ensure the configuration matches the details of your model.
