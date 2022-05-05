@@ -79,3 +79,5 @@ Open the `run_example.sh` file and ensure the configuration matches the details 
 ```
 $ qsub run_example.sh
 ```
+
+This should evolve the model for 1 year and output a file called `Tracer.nc`.
