@@ -1,0 +1,14 @@
+#PBS -l storage=gdata/hh5+gdata/v45+scratch/v45+gdata/e14+gdata/ik11
+#PBS -l mem=32GB
+#PBS -N easytmm
+
+echo $PWD
+cd $(realpath $0)
+echo $PWD
+
+source ./venv/bin/activate
+
+module load matlab/R2021b
+module load matlab_licence/<institution>
+
+python3 ./python/main.py -s <source output> -i <source input> --run_directory <initial run directory> -m om2 -c <boundary conidtions> -t <default timestep>
