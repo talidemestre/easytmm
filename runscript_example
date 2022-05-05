@@ -2,9 +2,7 @@
 #PBS -l mem=32GB
 #PBS -N easytmm
 
-echo $PWD
-cd $(realpath $0)
-echo $PWD
+cd <repository directory>
 
 source ./venv/bin/activate
 
