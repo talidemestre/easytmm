@@ -34,6 +34,8 @@ def matlab_postprocess(base_model_output_dir: Path, matlab_data: Path, output_di
     eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "matlab_tmm" / "Misc")),nargout=0)
     eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "matlab_tmm" / "TMM")),nargout=0)
     eng.addpath("{}".format(str(Path(__file__).parent / "matlab_scripts" / "Matrix_extraction_code")),nargout=0)
+    eng.addpath("{}".format(matlab_data),nargout=0)
+
     eng.GetTransport(str(assembled_transport_output_folder), int(ntiles), nargout=0) # converts the netcdf output from the model into Matlab Matrix files
     eng.get_transport_matrix_all(str(assembled_transport_output_folder), nargout=0) # combines the many individual tile matrices into a single matrix for each month
     eng.test_TMs_ann_filter(str(matlab_data), str(assembled_transport_output_folder), deltaT, nargout=0) # test the matrices for stability
