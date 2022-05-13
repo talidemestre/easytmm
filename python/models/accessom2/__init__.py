@@ -20,12 +20,12 @@ def preprocess(args: Namespace, tempdir: Path):
     try:
         assert(args.source_inputs != None)
     except:
-        raise ValueError("mom5 implementation requires a '--source_input' directory is specified")
+        raise ValueError("accessom2 implementation requires a '--source_input' directory is specified")
 
     try:
         assert(args.run_directory != None)
     except:
-        raise ValueError("mom5 implementation requires a '--run_directory' is specified for the climate model run")
+        raise ValueError("accessom2 implementation requires a '--run_directory' is specified for the climate model run")
 
 
     # make a copy of a successful run as a base reference

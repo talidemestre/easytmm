@@ -7,7 +7,7 @@ import os
 from models import *
 
 model_map = {
-    "mom5" : mom5,
+    "accessom2" : accessom2,
     "stub" : stub
 }
 
@@ -28,7 +28,7 @@ def setup_parser():
     parser.add_argument('-o', '--output', metavar='/path/to/matrix/output', 
                         help='path to output matrices', default=str(Path(__file__).parent.parent / "matrix_output"), type=Path)
     parser.add_argument('-m', '--model', metavar='"Model Type"', 
-                        help='input model type: mom5, stub', default="mom5")
+                        help='input model type: accessom2, stub', default="accessom2")
     return parser.parse_args()
 
 def main(args: Namespace):  

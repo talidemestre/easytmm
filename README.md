@@ -7,9 +7,10 @@ git clone https://github.com/talidemestre/easytmm.git
 cd easytmm
 ```
 ### 2. Create a Virtual Environment for Python
-To create a virtual environment (or `venv`) for python, you will need to run the command.
+To create a virtual environment (or `venv`) for python you will need to run the command to create one, and then activate it.
 ```
-$ python3 -m venv /path/to/new/virtual/environment
+$ python3 -m venv venv
+$ source venv/bin/activate
 ```
 ### 3. Install Matlab Engine API for Python
 [MathWorks has official instruction on how to install their API for Python.](https://au.mathworks.com/help/matlab/matlab_external/get-started-with-matlab-engine-for-python.html) Due to permissions issues with Gadi, I was unable to isntall using this method.
