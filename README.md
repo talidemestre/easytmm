@@ -83,6 +83,6 @@ $ qsub run_example.sh
 
 This should evolve the model for 1 year and output a file called `Tracer.nc`.
 
-# Citations
+## Citations
 * Khatiwala et al. (2005; https://doi.org/10.1016/j.ocemod.2004.04.002) 
 * Khatiwala (2007; https://doi.org/10.1029/2007GB002923)
