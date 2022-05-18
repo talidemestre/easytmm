@@ -3,8 +3,8 @@
 The recommended environment for using this program is a node running on the _National Computing Infrastructure_.
 ### 1. Open the repository
 ```
-git clone https://github.com/talidemestre/easytmm.git
-cd easytmm
+$ git clone https://github.com/talidemestre/easytmm.git
+$ cd easytmm
 ```
 ### 2. Create a Virtual Environment for Python
 To create a virtual environment (or `venv`) for python you will need to run the command to create one, and then activate it.
