@@ -72,6 +72,7 @@ Navigate to the output directory, and copy the necessary sources.
 ```
 $ cd matrix_output
 $ cp ../tmm/* . -r
+$ cp -s Tracer_bc_00 Tracer_bc00
 ```
 
 Open the `run_example.sh` file and ensure the configuration matches the details of your model.
