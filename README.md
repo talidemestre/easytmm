@@ -65,13 +65,14 @@ module load matlab_licence/<institution>
 python3 ./python/main.py -s <source output> -i <source input> --run_directory <initial run directory> -m om2 -c <boundary conidtions> -t <default timestep>
 ```
 ## Using the Transport Matrices
-Here is an example of how to use the transport matrices once they have been created. This example uses a driver precompiled for use on the _NCI_.
+Here is an example of how to use the transport matrices once they have been created. This example uses a driver precompiled for use on the _NCI_, if you are on alternative architecture than you must compile the `tmm` driver executable yourself at Samar Khatiwala's repository [here](https://github.com/samarkhatiwala/tmm/).
 
 Navigate to the output directory, and copy the necessary sources.
 
 ```
 $ cd matrix_output
 $ cp ../tmm/* . -r
+$ cp -s Tracer_bc_00 Tracer_bc00
 ```
 
 Open the `run_example.sh` file and ensure the configuration matches the details of your model.
@@ -81,3 +82,7 @@ $ qsub run_example.sh
 ```
 
 This should evolve the model for 1 year and output a file called `Tracer.nc`.
+
+# Citations
+* Khatiwala et al. (2005; https://doi.org/10.1016/j.ocemod.2004.04.002) 
+* Khatiwala (2007; https://doi.org/10.1029/2007GB002923)
