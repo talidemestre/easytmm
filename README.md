@@ -13,7 +13,7 @@ $ python3 -m venv venv
 $ source venv/bin/activate
 ```
 ### 3. Install Matlab Engine API for Python
-[MathWorks has official instruction on how to install their API for Python.](https://au.mathworks.com/help/matlab/matlab_external/get-started-with-matlab-engine-for-python.html) Due to permissions issues with Gadi, I was unable to isntall using this method.
+[MathWorks has official instruction on how to install their API for Python.](https://au.mathworks.com/help/matlab/matlab_external/get-started-with-matlab-engine-for-python.html) Due to permissions issues with Gadi, I was unable to install using this method.
 
 Instead, I had to copy Matlab to a local directory, and then install the engine from that directroy.
 ```
@@ -39,7 +39,7 @@ To generate a set of transport matrices `easytmm` requires multiple user argumen
 | -r, --run_directory      | The directory from which the model was run.             | None          |
 | -c, --initial_conditions | Path to initial / boundary conditions in netCDF format. | None          |
 | -t, --timestep           | The base timestep of the model in seconds.              | None          |
-| -o, --output             | The directory to write transport matrices too.          | matrix_output |
+| -o, --output             | The directory to write transport matrices to.           | matrix_output |
 | -m, --model              | The model being used, in this case, ACCESS-OM2.         | om2           |
 
 It is recommended to run this job with `qsub`, allocating at least 32GB of memory. Please ensure that your script is able to write to whichever working directory you have configured. To change the working directroy you can add `cd <directory>` to the start of your script.
@@ -84,5 +84,6 @@ $ qsub run_example.sh
 This should evolve the model for 1 year and output a file called `Tracer.nc`.
 
 ## Citations
+* Holmes et al. (2022; https://doi.org/10.1029/2021MS002914)
 * Khatiwala et al. (2005; https://doi.org/10.1016/j.ocemod.2004.04.002) 
 * Khatiwala (2007; https://doi.org/10.1029/2007GB002923)
